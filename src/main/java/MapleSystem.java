@@ -8,8 +8,9 @@ class MapleSystem{
 
     }
 
-    void handlePacket(int p){
-        C.sendPacket(p+1);
+    void handlePacket(byte[] data){
+        System.out.println("Maple received the packet. Thanks!");
+        if (C != null)
+            C.sendPacket(data);
     }
-
 }
