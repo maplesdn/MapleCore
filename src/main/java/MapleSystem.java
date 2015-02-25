@@ -1,7 +1,8 @@
 /**
  * Created by zhushigang on 2/21/15.
  */
-class MapleSystem{
+package org.maple.core;
+public class MapleSystem{
     Controller C;
     void init(Controller c){
         this.C = c;
