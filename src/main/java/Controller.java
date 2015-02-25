@@ -3,5 +3,5 @@
  */
 package org.maple.core;
 public interface Controller {
-    void sendPacket(byte[] data);
+    public void sendPacket(byte[] data);
 }
