@@ -11,13 +11,15 @@ public class MapleSystem{
 
         // TODO: pass userFunction as argument into init, rather than
         // hard-coding to be SampleMapleFunction.
-        this.userFunction = new SampleMapleFunction(); 
+        this.userFunction = new SampleMapleFunction();
+        this.userFunction = new LearningSwitch();
     }
 
     public void handlePacket(byte[] data){
-        System.out.println("Maple received the packet. Thanks!");
-
-        int out = userFunction.onPacket(data.length);
+        //TODO: convert data in to Packet data type
+        System.out.println("Maple received the packet. Thanks!"+data.length);
+        Packet p = null;
+        int out = userFunction.onPacket(p,data.length,data.length);
         System.out.println("User's MapleFunction returned: " + out);
 
         if (C != null)

@@ -2,8 +2,8 @@ package org.maple.core;
 
 public class SampleMapleFunction extends MapleFunction {
 
-  @Override public int onPacket(int p) {
-    return p + 1;
+  @Override public int onPacket(Packet p, int switchID, int portID) {
+    return switchID + 1;
   }
 
 }
