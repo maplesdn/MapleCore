@@ -3,10 +3,16 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <packaging>jar</packaging>
+    <packaging>bundle</packaging>
     <groupId>org.maple</groupId>
     <artifactId>core</artifactId>
     <version>1.0-SNAPSHOT</version>
+
+    <properties>
+      <bundle.plugin.version>2.3.7</bundle.plugin.version>
+    </properties>
+
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -16,4 +22,21 @@
         </dependency>
     </dependencies>
 
+<build>
+<plugins>
+  <plugin>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>maven-bundle-plugin</artifactId>
+      <version>${bundle.plugin.version}</version>
+      <extensions>true</extensions>
+      <configuration>
+          <instructions>
+	    <Bundle-Version>${project.version}</Bundle-Version>
+	    <Bundle-Name>${project.groupId}.${project.artifactId}</Bundle-Name>
+	    <Export-Package>org.maple.core.*</Export-Package>
+          </instructions>
+      </configuration>
+  </plugin>
+</plugins>
+</build>
 </project>
