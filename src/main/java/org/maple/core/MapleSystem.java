@@ -25,9 +25,10 @@ public class MapleSystem {
     frame.deserialize(data, 0, data.length);
     System.out.println("handlePacket.frame: " + frame);
 
-    // TODO: convert data in to Packet data type.
-    Packet p = null;
-    int out = userFunction.onPacket(p, data.length, data.length);
+    //TODO: replace 42 with real ingress port value.
+    Packet p = new Packet(frame, 42); 
+
+    int out = userFunction.onPacket(p);
     System.out.println("User's MapleFunction returned: " + out);
 
     if (C != null)

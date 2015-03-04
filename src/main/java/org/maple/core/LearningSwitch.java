@@ -11,7 +11,7 @@ public class LearningSwitch extends MapleFunction {
   }
 
   @Override
-  public int onPacket(Packet p, int switchID, int portID) {
+  public int onPacket(Packet p) {
     //TODO: implement the learning algorithm using Hashmap
     return 0;
   }
