@@ -9,7 +9,7 @@ public class MapleSystem {
   private Controller C;
   private MapleFunction userFunction;
 
-  public void init(Controller c) {
+  public MapleSystem(Controller c) {
     this.C = c;
 
     // TODO: pass userFunction as an argument into init,
@@ -18,20 +18,20 @@ public class MapleSystem {
     this.userFunction = new LearningSwitch();
   }
 
-  public void handlePacket(byte[] data) {
-    System.out.println("Maple received the packet. Data len: " + data.length);
+  public void handlePacket(byte[] data, int ingressPort) {
+    System.out.println("Maple received a packet with ingressPort: " + 
+                       ingressPort + " and frame len: " + data.length);
 
     Ethernet frame = new Ethernet();;
     frame.deserialize(data, 0, data.length);
     System.out.println("handlePacket.frame: " + frame);
 
-    //TODO: replace 42 with real ingress port value.
-    Packet p = new Packet(frame, 42); 
+    Packet p = new Packet(frame, ingressPort); 
 
     int out = userFunction.onPacket(p);
     System.out.println("User's MapleFunction returned: " + out);
 
     if (C != null)
-      C.sendPacket(data);
+      C.sendPacket(data, out);
   }
 }
