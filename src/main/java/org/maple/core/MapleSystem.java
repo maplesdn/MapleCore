@@ -21,6 +21,10 @@ public class MapleSystem {
   public void handlePacket(byte[] data) {
     System.out.println("Maple received the packet. Data len: " + data.length);
 
+    Ethernet frame = new Ethernet();;
+    frame.deserialize(data, 0, data.length);
+    System.out.println("handlePacket.frame: " + frame);
+
     // TODO: convert data in to Packet data type.
     Packet p = null;
     int out = userFunction.onPacket(p, data.length, data.length);
