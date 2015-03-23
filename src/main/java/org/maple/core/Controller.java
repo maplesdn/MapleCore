@@ -5,5 +5,5 @@
 package org.maple.core;
 
 public interface Controller {
-  public void sendPacket(Object[] env, byte[] data, int... ports);
+  public void sendPacket(byte[] data, int... ports);
 }

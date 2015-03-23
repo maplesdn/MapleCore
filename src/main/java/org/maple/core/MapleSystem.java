@@ -22,8 +22,7 @@ public class MapleSystem {
     this.userFunction = new LearningSwitch();
   }
 
-  public void handlePacket(Object[] env, byte[] data,
-                           int inSwitch, int inPort) {
+  public void handlePacket(byte[] data, int inSwitch, int inPort) {
     System.out.println("Maple received a packet with inPort: " +
                        inPort + " and frame len: " + data.length);
 
@@ -36,6 +35,6 @@ public class MapleSystem {
     int out = userFunction.onPacket(p);
     System.out.println("User's MapleFunction returned: " + out);
 
-    controller.sendPacket(env, data, out);
+    controller.sendPacket(data, out);
   }
 }
