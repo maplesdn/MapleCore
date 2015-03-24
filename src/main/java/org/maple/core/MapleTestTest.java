@@ -4,16 +4,16 @@ package org.maple.core;
  * to IntelliJ repository/lib repo
  */
 
-import org.junit.Test;
+// import org.junit.Test;
 
-import static org.junit.Assert.*;
+// import static org.junit.Assert.*;
 
 public class MapleTestTest {
 
-    @Test
+  //    @Test
     public void test_handlePacket() {
         System.out.println("Test if handlePacket method can successfully send packet");
-
+        /*
         Controller c = null;
 
         MapleSystem mapleSystem = new MapleSystem(c);
@@ -22,7 +22,7 @@ public class MapleTestTest {
 
         mapleSystem.handlePacket(data, ingressPort);
 
-
+        */
         // assertTrue(c.sendPacket(data, out));
     }
 
