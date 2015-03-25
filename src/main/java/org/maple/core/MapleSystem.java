@@ -4,12 +4,19 @@
 
 package org.maple.core;
 
+import java.util.HashSet;
+
 public class MapleSystem {
 
   private Controller controller;
   private MapleFunction userFunction;
 
+  HashSet<Integer> ports;
+
   public MapleSystem(Controller c) {
+
+    ports = new HashSet<Integer>();
+    
     if (c == null)
       throw new IllegalArgumentException("controller passed to " +
                                          "MapleSystem must be non-null");
@@ -22,8 +29,12 @@ public class MapleSystem {
     this.userFunction = new LearningSwitch();
   }
 
-  public void portUp(int port) {};
-  public void portDown(int port) {};
+  public void portUp(int port) {
+    ports.add(port);
+  };
+  public void portDown(int port) {
+    ports.remove(port);
+  };
   
   public void handlePacket(byte[] data, int inSwitch, int inPort) {
     System.out.println("Maple received a packet with inPort: " +
