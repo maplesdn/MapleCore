@@ -22,6 +22,9 @@ public class MapleSystem {
     this.userFunction = new LearningSwitch();
   }
 
+  public void portUp(int port) {};
+  public void portDown(int port) {};
+  
   public void handlePacket(byte[] data, int inSwitch, int inPort) {
     System.out.println("Maple received a packet with inPort: " +
                        inPort + " and frame len: " + data.length);
