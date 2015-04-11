@@ -4,25 +4,34 @@
 
 package org.maple.core;
 
+import java.util.LinkedList;
+
 public class Packet {
 
   Ethernet frame;
   int ingressPort;
-
+  LinkedList<TraceItem> trace;
+  
   public Packet(Ethernet frame, int ingressPort) {
     this.frame = frame;
     this.ingressPort = ingressPort;
+    this.trace = new LinkedList<TraceItem>();
   }
 
   public final long ethSrc() {
-    return Ethernet.toLong(frame.getSourceMACAddress());
+    long addr = Ethernet.toLong(frame.getSourceMACAddress());
+    trace.add(TraceItem.ethSrcItem(addr));
+    return addr;
   }
 
   public final long ethDst() {
-    return Ethernet.toLong(frame.getDestinationMACAddress());
+    long addr = Ethernet.toLong(frame.getDestinationMACAddress());
+    trace.add(TraceItem.ethDstItem(addr));
+    return addr;
   }
 
-  public final int ingressPort() { 
+  public final int ingressPort() {
+    trace.add(TraceItem.inPortItem(ingressPort));
     return ingressPort;
   }
 

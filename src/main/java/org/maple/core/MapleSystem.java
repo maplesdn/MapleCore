@@ -5,16 +5,20 @@
 package org.maple.core;
 
 import java.util.HashSet;
+import java.util.LinkedList;
+
 
 public class MapleSystem {
 
   private Controller controller;
   private MapleFunction userFunction;
+  TraceTree traceTree;
 
   HashSet<Integer> ports;
 
   public MapleSystem(Controller c) {
 
+    traceTree = new TraceTree();
     ports = new HashSet<Integer>();
     
     if (c == null)
@@ -49,8 +53,21 @@ public class MapleSystem {
     Packet p = new Packet(frame, inPort);
 
     int out = userFunction.onPacket(p);
-    System.out.println("User's MapleFunction returned: " + out);
+    
+    System.out.println("User's MapleFunction returned: " + out + " with trace: " + traceString(p.trace));
+
+    traceTree.augment(p.trace, out);
 
     controller.sendPacket(data, inSwitch, inPort, out);
   }
+
+  String traceString(LinkedList<TraceItem> trace) {
+    StringBuilder builder = new StringBuilder();
+    for (TraceItem item : trace) {
+      builder.append(item.toString());
+    }
+    return builder.toString();
+  }
+
+  
 }
