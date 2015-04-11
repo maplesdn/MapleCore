@@ -30,6 +30,11 @@ public class Packet {
     return addr;
   }
 
+  public final int ethType() {
+    trace.add(TraceItem.ethTypeItem(frame.getEtherType()));
+    return frame.getEtherType();
+  }
+
   public final int ingressPort() {
     trace.add(TraceItem.inPortItem(ingressPort));
     return ingressPort;

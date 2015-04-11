@@ -33,6 +33,13 @@ public class TraceItem {
     return item;
   }
 
+  public static TraceItem ethTypeItem(int typ) {
+    TraceItem item = new TraceItem();
+    item.field = TraceItem.Field.ETH_TYPE;
+    item.value = typ;
+    return item;
+  }
+
   public static TraceItem inPortItem(int port) {
     TraceItem item = new TraceItem();
     item.field = TraceItem.Field.IN_PORT;
