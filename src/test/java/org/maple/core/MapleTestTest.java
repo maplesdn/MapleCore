@@ -25,7 +25,7 @@ public class MapleTestTest {
         System.out.println("Test if handlePacket method can successfully send packet");
 
         Controller c = new Controller() {
-            public void sendPacket(byte[] data, int... ports) {
+            public void sendPacket(byte[] data, int inSwitch, int inPort, int... ports) {
               System.out.println("In sendPacket");
             }
           };

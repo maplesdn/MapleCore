@@ -49,6 +49,6 @@ public class MapleSystem {
     int out = userFunction.onPacket(p);
     System.out.println("User's MapleFunction returned: " + out);
 
-    controller.sendPacket(data, out);
+    controller.sendPacket(data, inSwitch, inPort, out);
   }
 }
