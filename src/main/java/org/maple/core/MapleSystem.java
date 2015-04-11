@@ -30,9 +30,11 @@ public class MapleSystem {
   }
 
   public void portUp(int port) {
+    System.out.println("MapleSystem.portUp(" + port +")");
     ports.add(port);
   };
   public void portDown(int port) {
+    System.out.println("MapleSystem.portDown(" + port +")");    
     ports.remove(port);
   };
   
