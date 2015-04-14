@@ -13,6 +13,11 @@ public class Match {
     return new Match(new HashSet<TraceItem>());
   }
 
+  public Match add(TraceItem item) {
+    fieldValues.add(item);
+    return this;
+  }
+
   @Override
   public boolean equals(Object other) {
     if (null == other) { return false; }

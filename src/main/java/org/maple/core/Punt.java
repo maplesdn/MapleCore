@@ -7,4 +7,10 @@ public class Punt extends Action {
     Punt other2 = (Punt) other;
     return true;
   }
+
+  @Override
+  public int hashCode() {
+    int result = 1;
+    return result;
+  }
 }

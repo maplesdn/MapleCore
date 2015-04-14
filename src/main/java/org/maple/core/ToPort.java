@@ -12,4 +12,12 @@ public class ToPort extends Action {
     ToPort other2 = (ToPort) other;
     return portID == other2.portID;
   }
+
+  @Override
+  public int hashCode() {
+    final int prime = 5557;
+    int result = 1;
+    result = prime * result + portID;
+    return result;
+  }
 }
