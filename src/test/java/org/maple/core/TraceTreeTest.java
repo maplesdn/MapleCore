@@ -74,6 +74,11 @@ public class TraceTreeTest {
     
   }
 
+  @Test
+  public void testItemEq() {
+    assertEquals(TraceItem.ethSrcItem(1),  TraceItem.ethSrcItem(1));
+    assertNotEquals(TraceItem.ethSrcItem(1),  TraceItem.ethSrcItem(2));    
+  }
 
   
   // Java does not support byte literals; therefore, we need to convert

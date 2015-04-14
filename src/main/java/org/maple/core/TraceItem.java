@@ -12,11 +12,18 @@ public class TraceItem {
   public Field field;
   public long value;
 
-  // TODO add equals(), hashCode()
+  // TODO add hashCode()
 
   @Override
   public String toString() {
     return "TraceItem [field=" + field + ", value=" + value + "]";
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (null == other) { return false; }
+    TraceItem other2 = (TraceItem) other;
+    return field==other2.field && value==other2.value;
   }
 
   public static TraceItem ethSrcItem(long addr) {
