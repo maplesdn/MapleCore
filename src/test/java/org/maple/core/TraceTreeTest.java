@@ -61,7 +61,6 @@ public class TraceTreeTest {
 
     assertTrue(null == node.getChild(PORT+1));
     assertTrue(null != node.getChild(PORT));
-
     assertTrue(node.getChild(PORT) instanceof L);
     L leaf = (L) node.getChild(PORT);
     assertEquals(outcome, leaf.outcome);
