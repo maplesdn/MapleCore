@@ -83,26 +83,38 @@ public class TraceTreeTest {
 
   @Test
   public void testCompile1() {
-    TraceTree tree = new TraceTree();
 
-    LinkedList<Rule> rules1 = new LinkedList<Rule>();
-    LinkedList<Action> punt = new LinkedList<Action>();
-    rules1.add(new Rule(0, Match.matchAny(), Rule.punt())); 
-    LinkedList<Rule> rules = tree.compile();
-    assertNotNull(rules);
-    assertEquals(rules1, rules);
+    TraceTree tree;
+    LinkedList<Rule> rulesExpected;
+    LinkedList<Action> actions;
+    LinkedList<TraceItem> trace;
 
-    rules1 = new LinkedList<Rule>();
-    LinkedList<Action> actions = new LinkedList<Action>();
+    tree = new TraceTree();
+    rulesExpected = new LinkedList<Rule>();
+    rulesExpected.add(new Rule(0, Match.matchAny(), Rule.punt())); 
+    assertNotNull(tree.compile());
+    assertEquals(rulesExpected, tree.compile());
+
+    rulesExpected = new LinkedList<Rule>();
+    actions = new LinkedList<Action>();
     actions.add(Action.ToPort(1));
     actions.add(Action.ToPort(2));
     actions.add(Action.ToPort(3));    
-    rules1.add(new Rule(0, Match.matchAny(), actions));
+    rulesExpected.add(new Rule(0, Match.matchAny(), actions));
     LinkedList<TraceItem> emptyTrace = new LinkedList<TraceItem>();
     int[] outcome = {1,2,3};
     tree.augment(emptyTrace, outcome);
-    assertEquals(rules1, rules);
-    
+    assertEquals(rulesExpected, tree.compile());
+
+    tree = new TraceTree();
+    trace = new LinkedList<TraceItem>();
+    trace.add(TraceItem.inPortItem(PORT));
+    tree.augment(trace, outcome);
+    rulesExpected = new LinkedList<Rule>();
+    rulesExpected.add(new Rule(0,
+                               Match.matchAny().add(TraceItem.inPortItem(PORT)),
+                               actions));
+    assertEquals(rulesExpected, tree.compile());
   }
   
   // Java does not support byte literals; therefore, we need to convert
