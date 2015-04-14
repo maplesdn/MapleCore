@@ -14,7 +14,11 @@ public class TraceTree {
   }
 
   public int[] evaluate(int inPort, Ethernet frame) {
-    return null;
+    if (null==root) {
+      return null;
+    } else {
+      return root.evaluate(inPort, frame);
+    }
   }
 
   private Node trace2tree(List<TraceItem> trace, int... ports) {

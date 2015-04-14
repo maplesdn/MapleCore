@@ -28,4 +28,25 @@ public class V extends Node {
     }
   }
   
+  public int[] evaluate(int inPort, Ethernet frame) {
+    Long value = extractField(field, inPort, frame);
+    assert value != null;
+    Node n = subtree.get(value);
+    if (null == n) {
+      return null;
+    } else {
+      return n.evaluate(inPort, frame);
+    }
+  }
+
+  Long extractField(TraceItem.Field fld, int inPort, Ethernet frame) {
+    switch (fld) {
+      case IN_PORT: return (long) inPort;
+      case ETH_SRC: return Ethernet.toLong(frame.getSourceMACAddress());
+      case ETH_DST: return Ethernet.toLong(frame.getDestinationMACAddress());
+      case ETH_TYPE: return (long) frame.getEtherType();
+      default: return null;
+    }
+  }
+
 }
