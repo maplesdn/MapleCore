@@ -12,8 +12,6 @@ public class TraceItem {
   public Field field;
   public long value;
 
-  // TODO add hashCode()
-
   @Override
   public String toString() {
     return "TraceItem [field=" + field + ", value=" + value + "]";
@@ -24,6 +22,15 @@ public class TraceItem {
     if (null == other) { return false; }
     TraceItem other2 = (TraceItem) other;
     return field==other2.field && value==other2.value;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 5557;
+    int result = 1;
+    result = prime * result + (int) field.ordinal();
+    result = prime * result + (int) value;
+    return result;
   }
 
   public static TraceItem ethSrcItem(long addr) {
