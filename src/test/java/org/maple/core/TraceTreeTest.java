@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 import java.util.LinkedList;
+import java.util.HashSet;
 
 public class TraceTreeTest {
 
@@ -80,6 +81,29 @@ public class TraceTreeTest {
     assertNotEquals(TraceItem.ethSrcItem(1),  TraceItem.ethSrcItem(2));    
   }
 
+  @Test
+  public void testCompile1() {
+    TraceTree tree = new TraceTree();
+
+    LinkedList<Rule> rules1 = new LinkedList<Rule>();
+    LinkedList<Action> punt = new LinkedList<Action>();
+    rules1.add(new Rule(0, Match.matchAny(), Rule.punt())); 
+    LinkedList<Rule> rules = tree.compile();
+    assertNotNull(rules);
+    assertEquals(rules1, rules);
+
+    rules1 = new LinkedList<Rule>();
+    LinkedList<Action> actions = new LinkedList<Action>();
+    actions.add(Action.ToPort(1));
+    actions.add(Action.ToPort(2));
+    actions.add(Action.ToPort(3));    
+    rules1.add(new Rule(0, Match.matchAny(), actions));
+    LinkedList<TraceItem> emptyTrace = new LinkedList<TraceItem>();
+    int[] outcome = {1,2,3};
+    tree.augment(emptyTrace, outcome);
+    assertEquals(rules1, rules);
+    
+  }
   
   // Java does not support byte literals; therefore, we need to convert
   // an array of ints to array of bytes.

@@ -1,6 +1,7 @@
 package org.maple.core;
 
 import java.util.List;
+import java.util.LinkedList;
 
 public class TraceTree {
 
@@ -19,6 +20,10 @@ public class TraceTree {
     } else {
       return root.evaluate(inPort, frame);
     }
+  }
+
+  public LinkedList<Rule> compile() {
+    return null;
   }
 
   private Node trace2tree(List<TraceItem> trace, int... ports) {
