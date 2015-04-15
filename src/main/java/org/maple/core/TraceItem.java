@@ -33,28 +33,28 @@ public class TraceItem {
     return result;
   }
 
-  public static TraceItem ethSrcItem(long addr) {
+  public static TraceItem ethSrc(long addr) {
     TraceItem item = new TraceItem();
     item.field = TraceItem.Field.ETH_SRC;
     item.value = addr;
     return item;
   }
 
-  public static TraceItem ethDstItem(long addr) {
+  public static TraceItem ethDst(long addr) {
     TraceItem item = new TraceItem();
     item.field = TraceItem.Field.ETH_DST;
     item.value = addr;
     return item;
   }
 
-  public static TraceItem ethTypeItem(int typ) {
+  public static TraceItem ethType(int typ) {
     TraceItem item = new TraceItem();
     item.field = TraceItem.Field.ETH_TYPE;
     item.value = typ;
     return item;
   }
 
-  public static TraceItem inPortItem(int port) {
+  public static TraceItem inPort(int port) {
     TraceItem item = new TraceItem();
     item.field = TraceItem.Field.IN_PORT;
     item.value = port;

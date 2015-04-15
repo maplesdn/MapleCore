@@ -51,7 +51,7 @@ public class TraceTreeTest {
 
     
     LinkedList<TraceItem> trace = new LinkedList<TraceItem>();
-    trace.add(TraceItem.inPortItem(PORT));
+    trace.add(TraceItem.inPort(PORT));
     int[] outcome = {1,2,3};
     tree.augment(trace, outcome);
 
@@ -77,8 +77,8 @@ public class TraceTreeTest {
 
   @Test
   public void testItemEq() {
-    assertEquals(TraceItem.ethSrcItem(1),  TraceItem.ethSrcItem(1));
-    assertNotEquals(TraceItem.ethSrcItem(1),  TraceItem.ethSrcItem(2));    
+    assertEquals(TraceItem.ethSrc(1),  TraceItem.ethSrc(1));
+    assertNotEquals(TraceItem.ethSrc(1),  TraceItem.ethSrc(2));    
   }
 
   @Test
@@ -108,11 +108,11 @@ public class TraceTreeTest {
 
     tree = new TraceTree();
     trace = new LinkedList<TraceItem>();
-    trace.add(TraceItem.inPortItem(PORT));
+    trace.add(TraceItem.inPort(PORT));
     tree.augment(trace, outcome);
     rulesExpected = new LinkedList<Rule>();
     rulesExpected.add(new Rule(0,
-                               Match.matchAny().add(TraceItem.inPortItem(PORT)),
+                               Match.matchAny().add(TraceItem.inPort(PORT)),
                                actions));
     assertEquals(rulesExpected, tree.compile());
   }
