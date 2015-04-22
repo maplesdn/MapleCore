@@ -59,6 +59,7 @@ public class MapleSystem {
     traceTree.augment(p.trace, out);
 
     controller.sendPacket(data, inSwitch, inPort, out);
+    controller.installRules(traceTree.compile(),inSwitch);
   }
 
   String traceString(LinkedList<TraceItem> trace) {

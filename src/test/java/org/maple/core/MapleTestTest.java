@@ -8,6 +8,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+import java.util.LinkedList;
+
 public class MapleTestTest {
 
   // Java does not support byte literals; therefore, we need to convert
@@ -27,6 +29,9 @@ public class MapleTestTest {
         Controller c = new Controller() {
             public void sendPacket(byte[] data, int inSwitch, int inPort, int... ports) {
               System.out.println("In sendPacket");
+            }
+            public void installRules(LinkedList<Rule> rules, int... outSwitches) {
+                System.out.println("In installRules");
             }
           };
 
