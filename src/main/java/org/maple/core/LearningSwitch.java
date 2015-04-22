@@ -7,6 +7,9 @@ package org.maple.core;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Example user defined algorithm policy which simple simulates the behaviour of a learing switch
+ */
 public class LearningSwitch extends MapleFunction {
   private Map<Long, Integer> MacTable;
 

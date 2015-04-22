@@ -7,7 +7,9 @@ package org.maple.core;
 import java.util.HashSet;
 import java.util.LinkedList;
 
-
+/**
+ * Maple System is the runtime system which should be initiated on the SDN controller side
+ */
 public class MapleSystem {
 
   private Controller controller;
@@ -16,6 +18,11 @@ public class MapleSystem {
 
   HashSet<Integer> ports;
 
+  /**
+   * Constructor to initiated the Maple System
+   * User should assign this.userFunction to their algorithm policy
+   * @param c   the controller class which should be implemented on the controller side
+   */
   public MapleSystem(Controller c) {
 
     traceTree = new TraceTree();
@@ -33,15 +40,30 @@ public class MapleSystem {
     this.userFunction = new LearningSwitch();
   }
 
+  /**
+   * The controller should call this function when a port in the network went up
+   * @param port the reference to the port went up
+   */
   public void portUp(int port) {
     System.out.println("MapleSystem.portUp(" + port +")");
     ports.add(port);
   };
+
+  /**
+   * The controller should call this function when a port in the network went down
+   * @param port the reference to the port went down
+   */
   public void portDown(int port) {
     System.out.println("MapleSystem.portDown(" + port +")");    
     ports.remove(port);
   };
-  
+
+  /**
+   * The controller should call this function when a packet is received
+   * @param data actual packet received
+   * @param inSwitch  reference to the ingress switch
+   * @param inPort refernce to the ingress port
+   */
   public void handlePacket(byte[] data, int inSwitch, int inPort) {
     System.out.println("Maple received a packet with inPort: " +
                        inPort + " and frame len: " + data.length);
