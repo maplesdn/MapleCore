@@ -45,8 +45,7 @@ public class TraceTree {
       Rule rule = new Rule(priority, m, actions);
       rules.add(rule);
     }
-    else {
-      assert t instanceof V;
+    else if (t instanceof V){
       Set<Long> keys = ((V) t).subtree.keySet();
       Iterator<Long> iterator = keys.iterator();
       while(iterator.hasNext()) {
@@ -56,6 +55,11 @@ public class TraceTree {
         m.add(item);
         build(((V) t).getChild(item.value), m, rules);
       }
+    } else {
+      LinkedList<Action> actions = new LinkedList<Action>();
+      actions.add(Action.Punt());
+      Rule rule = new Rule(priority,m, actions);
+      rules.add(rule);
     }
   }
 
