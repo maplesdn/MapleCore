@@ -2,11 +2,17 @@ package org.maple.core;
 
 public class TraceItem {
 
+  /*
+   IN_PORT: in port num
+   ETH_SRC: mac address source
+   ETH_DST: destination mac address/ ethernet addres
+   ETH_TYPE: ethernet type
+  */
   public enum Field {
-    IN_PORT,
-    ETH_SRC, 
-    ETH_DST,
-    ETH_TYPE
+    IN_PORT,  
+    ETH_SRC,  
+    ETH_DST, 
+    ETH_TYPE 
   }
   
   public Field field;
