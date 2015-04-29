@@ -283,6 +283,40 @@ public class TraceTreeTest {
   }
   
 
+  @Test
+  // Compile: test tree with both inPort and outcome
+  public void testCompile2() {
+
+    TraceTree tree;
+    LinkedList<Rule> rulesExpected;
+    LinkedList<Action> actions;
+    LinkedList<TraceItem> trace;
+
+    // null tree.compile() equals to rulesExpected blank
+    tree = new TraceTree();
+    rulesExpected = new LinkedList<Rule>();
+    rulesExpected.add(new Rule(0, Match.matchAny(), Rule.punt()));
+    assertNotNull(tree.compile());
+    assertEquals(rulesExpected, tree.compile());
+
+    trace = new LinkedList<TraceItem>();
+    trace.add(TraceItem.inPort(PORT));
+    int[] outcome = {1, 2, 3};
+    tree.augment(trace, outcome);
+
+    rulesExpected = new LinkedList<Rule>();
+    actions = new LinkedList<Action>();
+    actions.add(Action.ToPort(1));
+    actions.add(Action.ToPort(2));
+    actions.add(Action.ToPort(3));
+    rulesExpected.add(new Rule(0, Match.matchAny().add(TraceItem.inPort(PORT)), actions));
+
+    assertEquals(rulesExpected, tree.compile());
+
+  }
+  
+  
+
 
   // Java does not support byte literals; therefore, we need to convert
   // an array of ints to array of bytes.
