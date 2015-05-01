@@ -7,6 +7,8 @@ package org.maple.core;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.HashSet;
 
@@ -60,7 +62,7 @@ public class TraceTreeTest {
 
     V node = (V) tree.root;
 
-    assertTrue(null == node.getChild(PORT+1));
+    assertTrue(null == node.getChild(PORT + 1));
     assertTrue(null != node.getChild(PORT));
     assertTrue(node.getChild(PORT) instanceof L);
     L leaf = (L) node.getChild(PORT);
@@ -75,13 +77,32 @@ public class TraceTreeTest {
     
   }
 
+  // Simulate the trace of learning switch
+  @Test
+  public void testAugment3() {
+    TraceTree tree = new TraceTree();
+    LinkedList<TraceItem> trace = new LinkedList<TraceItem>();
+    trace.add(TraceItem.ethSrc(1));
+    trace.add(TraceItem.inPort(1));
+    trace.add(TraceItem.ethDst(2));
+    int[] outcome = {1,2,3,4,5};
+    tree.augment(trace, outcome);
+    assertTrue(tree.root != null);
+    assertTrue(tree.root instanceof V);
+
+    assertTrue(null != ((V) tree.root).getChild(1));
+    assertTrue(((V) tree.root).getChild(1) instanceof V);
+    assertTrue(((V) ((V) tree.root).getChild(1)).getChild(1) instanceof V);
+    assertTrue(((V) ((V) ((V) tree.root).getChild(1)).getChild(1)).getChild(2) instanceof L);
+  }
+
   @Test
   public void testItemEq() {
     assertEquals(TraceItem.ethSrc(1),  TraceItem.ethSrc(1));
     assertNotEquals(TraceItem.ethSrc(1),  TraceItem.ethSrc(2));    
   }
 
-  @Test
+  // @Test
   public void testCompile1() {
 
     TraceTree tree;
@@ -93,6 +114,12 @@ public class TraceTreeTest {
     rulesExpected = new LinkedList<Rule>();
     rulesExpected.add(new Rule(0, Match.matchAny(), Rule.punt())); 
     assertNotNull(tree.compile());
+    LinkedList<Rule> rules = tree.compile();
+    int i=0;
+    for(Rule rule : rules){
+      // System.out.println("Rule number "+i+" :"+rule.toString());
+      i++;
+    }
     assertEquals(rulesExpected, tree.compile());
 
     rulesExpected = new LinkedList<Rule>();
@@ -115,6 +142,50 @@ public class TraceTreeTest {
                                Match.matchAny().add(TraceItem.inPort(PORT)),
                                actions));
     assertEquals(rulesExpected, tree.compile());
+  }
+  @Test
+  public void testCompile2() {
+
+    TraceTree tree = new TraceTree();
+    LinkedList<TraceItem> trace = new LinkedList<TraceItem>();
+    trace.add(TraceItem.ethSrc(1));
+    trace.add(TraceItem.inPort(1));
+    trace.add(TraceItem.ethDst(2));
+    int[] outcome = {1,2,3,4,5};
+    tree.augment(trace, outcome);
+
+    LinkedList<TraceItem> trace2 = new LinkedList<TraceItem>();
+    trace2.add(TraceItem.ethSrc(3));
+    trace2.add(TraceItem.inPort(3));
+    trace2.add(TraceItem.ethDst(4));
+    int[] outcome2 = {1,2,3,4,5};
+    tree.augment(trace2, outcome2);
+    assertTrue(null != ((V) tree.root).getChild(1));
+    assertTrue(((V) tree.root).getChild(1) instanceof V);
+    assertTrue(((V) ((V) tree.root).getChild(1)).getChild(1) instanceof V);
+    assertTrue(((V) ((V) ((V) tree.root).getChild(1)).getChild(1)).getChild(2) instanceof L);
+    assertTrue(null != ((V) tree.root).getChild(3));
+    assertTrue(((V) tree.root).getChild(3) instanceof V);
+    assertTrue(((V) ((V) tree.root).getChild(3)).getChild(3) instanceof V);
+    assertTrue(((V) ((V) ((V) tree.root).getChild(3)).getChild(3)).getChild(4) instanceof L);
+    // printTree(tree.root);
+    LinkedList<Rule> rules = tree.compile();
+    int i=0;
+    for(Rule rule: rules) {
+      System.out.println("Rule number "+i+": "+rule.toString());
+      i++;
+    }
+  }
+
+  private void printTree(Node root) {
+    if(root instanceof V) {
+      System.out.println();
+      Iterator<Long> NodeIterator = ((V) root).subtree.keySet().iterator();
+    }
+    else {
+
+    }
+
   }
   
   // Java does not support byte literals; therefore, we need to convert

@@ -24,6 +24,21 @@ public class Rule {
         actions.equals(other2.actions);
   }
 
+  @Override
+  public String toString() {
+    String str = "Rule [Priority: ";
+    str+= priority;
+    str+= "; Matches: ";
+    for(TraceItem item: match.fieldValues) {
+      str+=item.toString();
+      str+=" ";
+    }
+    str+="; ";
+    for(Action action: actions)
+      str+="actions ";
+    return str;
+  }
+
   public static LinkedList<Action> punt() {
     LinkedList<Action> as = new LinkedList<Action>();
     as.add(Action.Punt());
