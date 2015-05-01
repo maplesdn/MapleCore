@@ -37,9 +37,8 @@ public class TraceTree {
   private void build(Node t,Match match) {
     if (t instanceof L) {
       L leaf = (L) t;
-      LinkedList<Action> actions = new LinkedList<Action>();
-      actions.add(new ToPorts(leaf.outcome));
-      Rule rule = new Rule(priority, match, actions);
+      Action action = new ToPorts(leaf.outcome);
+      Rule rule = new Rule(priority, match, action);
       rules.add(rule);
     }
     else if (t instanceof V){
@@ -58,9 +57,7 @@ public class TraceTree {
         build(((V) t).getChild(item.value),m);
       }
     } else {
-      LinkedList<Action> actions = new LinkedList<Action>();
-      actions.add(Action.Punt());
-      Rule rule = new Rule(priority,Match.matchAny(), actions);
+      Rule rule = new Rule(priority, Match.matchAny(), Action.Punt());
       rules.add(rule);
     }
   }

@@ -263,21 +263,20 @@ public class TraceTreeTest {
 
         TraceTree tree;
         LinkedList<Rule> rulesExpected;
-        LinkedList<Action> actions;
+        Action action;
         LinkedList<TraceItem> trace;
 
         tree = new TraceTree();
         rulesExpected = new LinkedList<Rule>();
-        rulesExpected.add(new Rule(0, Match.matchAny(), Rule.punt()));
+        rulesExpected.add(new Rule(0, Match.matchAny(), Action.Punt()));
         assertNotNull(tree.compile());
         assertEquals(rulesExpected, tree.compile());
 
         rulesExpected = new LinkedList<Rule>();
-        actions = new LinkedList<Action>();
-        actions.add(Action.ToPorts(1,2,3));
+        action = Action.ToPorts(1,2,3);
         // actions.add(Action.ToPort(2));
         // actions.add(Action.ToPort(3));
-        rulesExpected.add(new Rule(0, Match.matchAny(), actions));
+        rulesExpected.add(new Rule(0, Match.matchAny(), action));
         LinkedList<TraceItem> emptyTrace = new LinkedList<TraceItem>();
         int[] outcome = {1,2,3};
         tree.augment(emptyTrace, outcome);
@@ -290,7 +289,7 @@ public class TraceTreeTest {
         rulesExpected = new LinkedList<Rule>();
         rulesExpected.add(new Rule(0,
                 Match.matchAny().add(TraceItem.inPort(PORT)),
-                actions));
+                action));
         assertEquals(rulesExpected, tree.compile());
     }
 
@@ -301,13 +300,13 @@ public class TraceTreeTest {
 
         TraceTree tree;
         LinkedList<Rule> rulesExpected;
-        LinkedList<Action> actions;
+        Action action;
         LinkedList<TraceItem> trace;
 
         // null tree.compile() equals to rulesExpected blank
         tree = new TraceTree();
         rulesExpected = new LinkedList<Rule>();
-        rulesExpected.add(new Rule(0, Match.matchAny(), Rule.punt()));
+        rulesExpected.add(new Rule(0, Match.matchAny(), Action.Punt()));
         assertNotNull(tree.compile());
         assertEquals(rulesExpected, tree.compile());
 
@@ -317,9 +316,8 @@ public class TraceTreeTest {
         tree.augment(trace, outcome);
 
         rulesExpected = new LinkedList<Rule>();
-        actions = new LinkedList<Action>();
-        actions.add(Action.ToPorts(1,2,3));
-        rulesExpected.add(new Rule(0, Match.matchAny().add(TraceItem.inPort(PORT)), actions));
+        action = Action.ToPorts(1,2,3);
+        rulesExpected.add(new Rule(0, Match.matchAny().add(TraceItem.inPort(PORT)), action));
 
         assertEquals(rulesExpected, tree.compile());
 
