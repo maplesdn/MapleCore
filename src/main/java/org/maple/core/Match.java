@@ -19,6 +19,16 @@ public class Match {
   }
 
   @Override
+  public String toString() {
+    String str = "Matches: ";
+    for (TraceItem item : fieldValues) {
+      str+=item.toString();
+      str+="; ";
+    }
+    return str.substring(0,str.length()-2);
+  }
+
+  @Override
   public boolean equals(Object other) {
     if (null == other) { return false; }
     Match other2 = (Match) other;

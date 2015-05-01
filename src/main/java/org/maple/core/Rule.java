@@ -26,16 +26,14 @@ public class Rule {
 
   @Override
   public String toString() {
-    String str = "Rule [Priority: ";
+    String str = "Rule (Priority: ";
     str+= priority;
-    str+= "; Matches: ";
-    for(TraceItem item: match.fieldValues) {
-      str+=item.toString();
-      str+=" ";
-    }
-    str+="; ";
-    for(Action action: actions)
-      str+="actions ";
+    str+=", ";
+    str+=match.toString();
+    str+=", ";
+    for(Action action : actions)
+      str+=action.toString();
+    str+=")";
     return str;
   }
 
