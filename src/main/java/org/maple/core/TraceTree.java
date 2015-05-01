@@ -11,11 +11,16 @@ public class TraceTree {
   public int priority = 0;
   public LinkedList<Rule> rules;
 
-  public void augment(List<TraceItem> trace, int... ports) {
+  public void augment(List<TraceItem> trace, Route route) {
+    int[] portsArray = new int[route.ports.size()];
+    for (int i = 0; i < route.ports.size(); i++) {
+      portsArray[i] = route.ports.get(i);
+    }
+    
     if(root==null) {
-      root = trace2tree(trace, ports);
+      root = trace2tree(trace, portsArray);
     } else {
-      root.augment(trace, ports);
+      root.augment(trace, portsArray);
     }
   }
 

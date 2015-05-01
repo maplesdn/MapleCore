@@ -47,6 +47,7 @@ public class MapleSystem {
   public void portUp(int port) {
     System.out.println("MapleSystem.portUp(" + port +")");
     ports.add(port);
+    userFunction.ports.add(port);
   };
 
   /**
@@ -56,6 +57,7 @@ public class MapleSystem {
   public void portDown(int port) {
     System.out.println("MapleSystem.portDown(" + port +")");    
     ports.remove(port);
+    userFunction.ports.remove(port);    
   };
 
   /**
@@ -74,13 +76,16 @@ public class MapleSystem {
 
     Packet p = new Packet(frame, inPort);
 
-    int out = userFunction.onPacket(p);
+    Route out = userFunction.onPacket(p);
     
     System.out.println("User's MapleFunction returned: " + out + " with trace: " + traceString(p.trace));
 
     traceTree.augment(p.trace, out);
 
-    controller.sendPacket(data, inSwitch, inPort, out);
+    // TODO: make this a single send to multiple ports.
+    for (Integer port : out.ports) {
+      controller.sendPacket(data, inSwitch, inPort, port);
+    }
     controller.installRules(traceTree.compile(),inSwitch);
 
     //TODO
