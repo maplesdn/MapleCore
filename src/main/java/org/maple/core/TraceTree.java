@@ -1,7 +1,5 @@
 package org.maple.core;
 
-import sun.awt.image.ImageWatched;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
