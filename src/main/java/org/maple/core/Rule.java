@@ -26,13 +26,13 @@ public class Rule {
 
   @Override
   public String toString() {
-    String str = "Rule (Priority: ";
+    String str = "Rule [ priority: ";
     str+= priority;
-    str+=", ";
+    str+=", match: ";
     str+=match.toString();
-    str+=", ";
+    str+=", action: ";
     str+=action.toString();
-    str+=")";
+    str+="]";
     return str;
   }
 
