@@ -38,11 +38,9 @@ public class TraceTree {
 
   private void build(Node t,Match match) {
     if (t instanceof L) {
+      L leaf = (L) t;
       LinkedList<Action> actions = new LinkedList<Action>();
-      for (int i=0; i<((L) t).outcome.length; i++) {
-        ToPort toPort = new ToPort(((L) t).outcome[i]);
-        actions.add(toPort);
-      }
+      actions.add(new ToPorts(leaf.outcome));
       Rule rule = new Rule(priority, match, actions);
       rules.add(rule);
     }

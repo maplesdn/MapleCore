@@ -274,9 +274,9 @@ public class TraceTreeTest {
 
         rulesExpected = new LinkedList<Rule>();
         actions = new LinkedList<Action>();
-        actions.add(Action.ToPort(1));
-        actions.add(Action.ToPort(2));
-        actions.add(Action.ToPort(3));
+        actions.add(Action.ToPorts(1,2,3));
+        // actions.add(Action.ToPort(2));
+        // actions.add(Action.ToPort(3));
         rulesExpected.add(new Rule(0, Match.matchAny(), actions));
         LinkedList<TraceItem> emptyTrace = new LinkedList<TraceItem>();
         int[] outcome = {1,2,3};
@@ -318,9 +318,7 @@ public class TraceTreeTest {
 
         rulesExpected = new LinkedList<Rule>();
         actions = new LinkedList<Action>();
-        actions.add(Action.ToPort(1));
-        actions.add(Action.ToPort(2));
-        actions.add(Action.ToPort(3));
+        actions.add(Action.ToPorts(1,2,3));
         rulesExpected.add(new Rule(0, Match.matchAny().add(TraceItem.inPort(PORT)), actions));
 
         assertEquals(rulesExpected, tree.compile());
