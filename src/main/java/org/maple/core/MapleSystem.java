@@ -93,7 +93,7 @@ public class MapleSystem {
 
   
   public Diff diff(LinkedList<Rule> oldRules, LinkedList<Rule> newRules) {
-    return Diff(new LinkdList<Rule>(), new LinkedList<Rule>());
+    return new Diff(new LinkedList<Rule>(), new LinkedList<Rule>());
   }
 
   String traceString(LinkedList<TraceItem> trace) {
