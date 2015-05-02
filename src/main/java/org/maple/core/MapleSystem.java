@@ -82,10 +82,7 @@ public class MapleSystem {
 
     traceTree.augment(p.trace, out);
 
-    // TODO: make this a single send to multiple ports.
-    for (Integer port : out.ports) {
-      controller.sendPacket(data, inSwitch, inPort, port);
-    }
+    controller.sendPacket(data, inSwitch, inPort, listToArray(out.ports));
     controller.installRules(traceTree.compile(),inSwitch);
 
     //TODO
@@ -96,6 +93,14 @@ public class MapleSystem {
     // installRules(diff.added); 
   }
 
+
+  int[] listToArray(LinkedList<Integer> input) {
+    int[] output = new int[input.size()];
+    for (int i = 0; i < output.length; i++) {
+      output[i] = input.get(i);
+    }
+    return output;
+  }
   
   public Diff diff(LinkedList<Rule> oldRules, LinkedList<Rule> newRules) {
     LinkedList<Rule> removed = new LinkedList<Rule>();
