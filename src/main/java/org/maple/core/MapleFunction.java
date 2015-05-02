@@ -8,7 +8,7 @@ import java.util.LinkedList;
  */
 public abstract class MapleFunction {
 
-  HashSet<Integer> ports;
+  HashSet<Integer> ports = new HashSet<Integer>();
 
   final public HashSet<Integer> ports() {
     // make a copy:

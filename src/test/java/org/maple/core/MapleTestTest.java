@@ -48,6 +48,9 @@ public class MapleTestTest {
         int ingressPort = 23;
         int switchID = 42;
 
+        mapleSystem.portUp(23);
+        mapleSystem.portUp(24);
+        mapleSystem.portUp(25);        
         mapleSystem.handlePacket(frameBytes, switchID, ingressPort);
 
 
