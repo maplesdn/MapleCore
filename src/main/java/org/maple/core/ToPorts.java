@@ -9,12 +9,16 @@ public class ToPorts extends Action {
   @Override
   public boolean equals(Object other) {
     if (null == other) { return false; }
-    ToPorts other2 = (ToPorts) other;
-    if (portIDs.length != other2.portIDs.length) { return false; }
-    for (int i = 0; i < portIDs.length; i++) {
-      if (portIDs[i] != other2.portIDs[i]) { return false; }
+    if (other instanceof ToPorts) {
+      ToPorts other2 = (ToPorts) other;
+      if (portIDs.length != other2.portIDs.length) { return false; }
+      for (int i = 0; i < portIDs.length; i++) {
+        if (portIDs[i] != other2.portIDs[i]) { return false; }
+      }
+      return true;
+    } else {
+      return false;
     }
-    return true;
   }
 
   @Override

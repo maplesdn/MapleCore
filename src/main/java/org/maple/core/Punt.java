@@ -4,8 +4,12 @@ public class Punt extends Action {
   @Override
   public boolean equals(Object other) {
     if (null == other) { return false; }
-    Punt other2 = (Punt) other;
-    return true;
+    if (other instanceof Punt) {
+      Punt other2 = (Punt) other;
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @Override
