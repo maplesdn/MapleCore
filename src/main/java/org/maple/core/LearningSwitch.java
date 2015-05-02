@@ -24,7 +24,7 @@ public class LearningSwitch extends MapleFunction {
     MacTable.put(src_mac,p.ingressPort());
     long dst_mac = p.ethDst();
     if(MacTable.containsKey(dst_mac)==false) {
-      return Route.toPorts(Integer.MAX_VALUE);
+      return Route.toPorts(ports());
     }else {
       int dst_portID = MacTable.get(dst_mac);
       return Route.toPorts(dst_portID);
