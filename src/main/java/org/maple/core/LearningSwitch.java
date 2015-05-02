@@ -21,9 +21,6 @@ public class LearningSwitch extends MapleFunction {
   @Override
   public Route onPacket(Packet p) {
     long src_mac = p.ethSrc();
-
-    if (src_mac == 2L) { return Route.drop(); }
-    
     MacTable.put(src_mac,p.ingressPort());
     long dst_mac = p.ethDst();
     if(MacTable.containsKey(dst_mac)==false) {
