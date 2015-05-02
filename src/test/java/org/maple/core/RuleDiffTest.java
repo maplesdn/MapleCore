@@ -54,6 +54,9 @@ public class RuleDiffTest {
             public void installRules(LinkedList<Rule> rules, int... outSwitches) {
                 System.out.println("In installRules");
             }
+            public void deleteRules(LinkedList<Rule> rules, int... outSwitches) {
+                System.out.println("In deleteRules");
+            }
         };
 
         MapleSystem mapleSystem = new MapleSystem(c);
