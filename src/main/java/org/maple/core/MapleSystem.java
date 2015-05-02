@@ -98,7 +98,29 @@ public class MapleSystem {
 
   
   public Diff diff(LinkedList<Rule> oldRules, LinkedList<Rule> newRules) {
-    return new Diff(new LinkedList<Rule>(), new LinkedList<Rule>());
+    LinkedList<Rule> removed = new LinkedList<Rule>();
+    for(Rule oldRule : oldRules) {
+      boolean inNewRules = false;
+      for(Rule newRule : newRules) {
+        if (oldRule.equals(newRule))
+          inNewRules = true;
+      }
+      if(!inNewRules)
+        removed.add(oldRule);
+    }
+
+    LinkedList<Rule> added = new LinkedList<Rule>();
+    for(Rule newRule : newRules) {
+      boolean inOldRules = false;
+      for(Rule oldRule : oldRules) {
+        if (newRule.equals(oldRule))
+          inOldRules = true;
+      }
+      if(!inOldRules)
+        added.add(newRule);
+    }
+
+    return new Diff(removed, added);
   }
 
   String traceString(LinkedList<TraceItem> trace) {
