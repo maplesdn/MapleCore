@@ -22,13 +22,9 @@ public class V extends Node {
     if (trace.size()==0) {
       subtree.put(next.value,new L(ports));
     } else {
-      if(getChild(next.value)!=null)
-        getChild(next.value).augment(trace,ports);
-      else {
-        V child = new V();
-        subtree.put(next.value,child);
-        child.augment(trace, ports);
-      }
+      V child = new V();
+      subtree.put(next.value,child);
+      child.augment(trace, ports);
     }
   }
   
