@@ -4,8 +4,12 @@ public class Drop extends Action {
   @Override
   public boolean equals(Object other) {
     if (null == other) { return false; }
-    Drop other2 = (Drop) other;
-    return true;
+    if (other instanceof Drop) {
+      Drop other2 = (Drop) other;
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @Override

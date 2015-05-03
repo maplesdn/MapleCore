@@ -1,7 +1,5 @@
 package org.maple.core;
 
-import sun.awt.image.ImageWatched;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
@@ -13,11 +11,16 @@ public class TraceTree {
   public int priority = 0;
   public LinkedList<Rule> rules;
 
-  public void augment(List<TraceItem> trace, int... ports) {
+  public void augment(List<TraceItem> trace, Route route) {
+    int[] portsArray = new int[route.ports.size()];
+    for (int i = 0; i < route.ports.size(); i++) {
+      portsArray[i] = route.ports.get(i);
+    }
+    
     if(root==null) {
-      root = trace2tree(trace, ports);
+      root = trace2tree(trace, portsArray);
     } else {
-      root.augment(trace, ports);
+      root.augment(trace, portsArray);
     }
   }
 
@@ -38,12 +41,9 @@ public class TraceTree {
 
   private void build(Node t,Match match) {
     if (t instanceof L) {
-      LinkedList<Action> actions = new LinkedList<Action>();
-      for (int i=0; i<((L) t).outcome.length; i++) {
-        ToPort toPort = new ToPort(((L) t).outcome[i]);
-        actions.add(toPort);
-      }
-      Rule rule = new Rule(priority, match, actions);
+      L leaf = (L) t;
+      Action action = new ToPorts(leaf.outcome);
+      Rule rule = new Rule(priority, match, action);
       rules.add(rule);
     }
     else if (t instanceof V){
@@ -62,9 +62,7 @@ public class TraceTree {
         build(((V) t).getChild(item.value),m);
       }
     } else {
-      LinkedList<Action> actions = new LinkedList<Action>();
-      actions.add(Action.Punt());
-      Rule rule = new Rule(priority,Match.matchAny(), actions);
+      Rule rule = new Rule(priority, Match.matchAny(), Action.Punt());
       rules.add(rule);
     }
   }

@@ -15,7 +15,7 @@ public class MapleSystem {
   private Controller controller;
   private MapleFunction userFunction;
   TraceTree traceTree;
-
+  LinkedList<Rule> currentRules;
   HashSet<Integer> ports;
 
   /**
@@ -26,6 +26,7 @@ public class MapleSystem {
   public MapleSystem(Controller c) {
 
     traceTree = new TraceTree();
+    currentRules = new LinkedList<Rule>();
     ports = new HashSet<Integer>();
     
     if (c == null)
@@ -45,8 +46,9 @@ public class MapleSystem {
    * @param port the reference to the port went up
    */
   public void portUp(int port) {
-    System.out.println("MapleSystem.portUp(" + port +")");
+    // System.out.println("MapleSystem.portUp(" + port +")");
     ports.add(port);
+    userFunction.ports.add(port);
   };
 
   /**
@@ -54,8 +56,9 @@ public class MapleSystem {
    * @param port the reference to the port went down
    */
   public void portDown(int port) {
-    System.out.println("MapleSystem.portDown(" + port +")");    
+    // System.out.println("MapleSystem.portDown(" + port +")");    
     ports.remove(port);
+    userFunction.ports.remove(port);    
   };
 
   /**
@@ -65,35 +68,64 @@ public class MapleSystem {
    * @param inPort refernce to the ingress port
    */
   public void handlePacket(byte[] data, int inSwitch, int inPort) {
-    System.out.println("Maple received a packet with inPort: " +
-                       inPort + " and frame len: " + data.length);
+    /* System.out.println("Maple received a packet with inPort: " +
+       inPort + " and frame len: " + data.length); */
 
     Ethernet frame = new Ethernet();
     frame.deserialize(data, 0, data.length);
-    System.out.println("handlePacket.frame: " + frame);
+    // System.out.println("handlePacket.frame: " + frame);
 
     Packet p = new Packet(frame, inPort);
 
-    int out = userFunction.onPacket(p);
+    Route out = userFunction.onPacket(p);
     
-    System.out.println("User's MapleFunction returned: " + out + " with trace: " + traceString(p.trace));
+    // System.out.println("User's MapleFunction returned: " + out + " with trace: " + traceString(p.trace));
 
     traceTree.augment(p.trace, out);
 
-    controller.sendPacket(data, inSwitch, inPort, out);
-    controller.installRules(traceTree.compile(),inSwitch);
+    controller.sendPacket(data, inSwitch, inPort, listToArray(out.ports));
 
-    //TODO
-    // oldRules = currentRules (defined currentRules in this object).
-    // currentRules = traceTree.compile();
-    // Diff diff = diff(oldRules, currentRules);
-    // deleteRules(diff.removed);
-    // installRules(diff.added); 
+    // Inform controller of updated rule sets.
+    LinkedList<Rule> oldRules = currentRules;
+    currentRules = traceTree.compile();
+    Diff diff = diff(oldRules, currentRules);
+    controller.deleteRules(diff.removed, inSwitch);
+    controller.installRules(diff.added, inSwitch); 
   }
 
+
+  int[] listToArray(LinkedList<Integer> input) {
+    int[] output = new int[input.size()];
+    for (int i = 0; i < output.length; i++) {
+      output[i] = input.get(i);
+    }
+    return output;
+  }
   
   public Diff diff(LinkedList<Rule> oldRules, LinkedList<Rule> newRules) {
-    return new Diff(new LinkedList<Rule>(), new LinkedList<Rule>());
+    LinkedList<Rule> removed = new LinkedList<Rule>();
+    for(Rule oldRule : oldRules) {
+      boolean inNewRules = false;
+      for(Rule newRule : newRules) {
+        if (oldRule.equals(newRule))
+          inNewRules = true;
+      }
+      if(!inNewRules)
+        removed.add(oldRule);
+    }
+
+    LinkedList<Rule> added = new LinkedList<Rule>();
+    for(Rule newRule : newRules) {
+      boolean inOldRules = false;
+      for(Rule oldRule : oldRules) {
+        if (newRule.equals(oldRule))
+          inOldRules = true;
+      }
+      if(!inOldRules)
+        added.add(newRule);
+    }
+
+    return new Diff(removed, added);
   }
 
   String traceString(LinkedList<TraceItem> trace) {

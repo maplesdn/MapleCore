@@ -20,7 +20,6 @@ public class TraceTreeTest {
             43,44,45,46,47,48,49,50,51,52,53,54,55};
     int PORT = 10;
 
-
     @Test
     // empty tree augmented by empty trace with outcome
     public void testAugment1() {
@@ -31,19 +30,18 @@ public class TraceTreeTest {
 
         LinkedList<TraceItem> emptyTrace = new LinkedList<TraceItem>();  // import of augment
         int[] outcome = {1,2,3};   // user function return
-        tree.augment(emptyTrace, outcome);
+        tree.augment(emptyTrace, Route.toPorts(outcome));
 
         // UnitTest will stop if any assert.. statement fails
         assertNotNull(tree.root);
         assertTrue(tree.root instanceof L); // L is leaf
-        assertEquals(outcome, ((L) tree.root).outcome);  // cast tree.root to L leaf
-
+        assertArrayEquals(outcome, ((L) tree.root).outcome);  // cast tree.root to L leaf
 
         byte[] frameBytes = makeFrameBytes(data);
         Ethernet frame = new Ethernet();  // create import
         frame.deserialize(frameBytes, 0, frameBytes.length);
         assertNotNull(tree.evaluate(PORT, frame));  // tree.evaluate: find all the L fulfill the requirements PORT and frame
-        assertEquals(outcome, tree.evaluate(PORT, frame));
+        assertArrayEquals(outcome, tree.evaluate(PORT, frame));
     }
 
 
@@ -59,7 +57,7 @@ public class TraceTreeTest {
         LinkedList<TraceItem> trace = new LinkedList<TraceItem>();
         trace.add(TraceItem.inPort(PORT));  // trace's field inPort is PORT
         int[] outcome = {1,2,3};
-        tree.augment(trace, outcome);
+        tree.augment(trace, Route.toPorts(outcome));
 
         assertNotNull(tree.root);
         assertTrue(tree.root instanceof V); // whether tree.root is V
@@ -70,14 +68,14 @@ public class TraceTreeTest {
         assertNotNull(node.getChild(PORT));
         assertTrue(node.getChild(PORT) instanceof L);
         L leaf = (L) node.getChild(PORT);
-        assertEquals(outcome, leaf.outcome);
+        assertArrayEquals(outcome, leaf.outcome);
 
         byte[] frameBytes = makeFrameBytes(data);
         Ethernet frame = new Ethernet();
         frame.deserialize(frameBytes, 0, frameBytes.length);
         assertNull(tree.evaluate(PORT + 1, frame));
         assertNotNull(tree.evaluate(PORT, frame));
-        assertEquals(outcome, tree.evaluate(PORT, frame));
+        assertArrayEquals(outcome, tree.evaluate(PORT, frame));
 
     }
 
@@ -104,7 +102,7 @@ public class TraceTreeTest {
         trace.add(TraceItem.ethDst(0x02));
         int[] outcome={2};
 
-        tree.augment(trace, outcome);
+        tree.augment(trace, Route.toPorts(outcome));
 
         assertNotNull(tree.root);
         V node = (V) tree.root;
@@ -115,7 +113,7 @@ public class TraceTreeTest {
         assertNull(node2.getChild(0x03));
         assertTrue(node2.getChild(0x02) instanceof L);
         L leaf = (L) node2.getChild(0x02);
-        assertEquals(leaf.outcome, outcome);
+        assertArrayEquals(leaf.outcome, outcome);
 
         LinkedList<TraceItem> trace2 = new LinkedList<TraceItem>();
 
@@ -124,7 +122,7 @@ public class TraceTreeTest {
         int[] outcome2 = {5};
 
         // non-empty tree
-        tree.augment(trace2, outcome2);
+        tree.augment(trace2, Route.toPorts(outcome2));
         node = (V) tree.root;
         node2 = (V) node.getChild(1);
 
@@ -142,7 +140,7 @@ public class TraceTreeTest {
         assertTrue(node2.getChild(0x05) instanceof L);
         L leaf2 = (L) node2.getChild(0x05);
         assertNotEquals(leaf2.outcome, outcome);
-        assertEquals(leaf2.outcome, outcome2);
+        assertArrayEquals(leaf2.outcome, outcome2);
     }
 
 
@@ -160,7 +158,7 @@ public class TraceTreeTest {
         trace.add(TraceItem.ethDst(0x02));
         int[] outcome={2};
 
-        tree.augment(trace, outcome);
+        tree.augment(trace, Route.toPorts(outcome));
 
         assertNotNull(tree.root);
         V node = (V) tree.root;
@@ -171,14 +169,14 @@ public class TraceTreeTest {
         assertNull(node2.getChild(0x03));
         assertTrue(node2.getChild(0x02) instanceof L);
         L leaf = (L) node2.getChild(0x02);
-        assertEquals(leaf.outcome, outcome);
+        assertArrayEquals(leaf.outcome, outcome);
 
         LinkedList<TraceItem> trace2 = new LinkedList<TraceItem>();
 
         int[] outcome2 = {5};
 
         // non-empty tree
-        tree.augment(trace2, outcome2);
+        tree.augment(trace2, Route.toPorts(outcome2));
 
         assertNotNull(tree.root);
 
@@ -206,7 +204,7 @@ public class TraceTreeTest {
         trace.add(TraceItem.ethDst(0x02));
         int[] outcome={2};
 
-        tree.augment(trace, outcome);
+        tree.augment(trace, Route.toPorts(outcome));
 
         assertNotNull(tree.root);
         V node = (V) tree.root;
@@ -217,7 +215,7 @@ public class TraceTreeTest {
         assertNull(node2.getChild(0x03));
         assertTrue(node2.getChild(0x02) instanceof L);
         L leaf = (L) node2.getChild(0x02);
-        assertEquals(leaf.outcome, outcome);
+        assertArrayEquals(leaf.outcome, outcome);
 
         LinkedList<TraceItem> trace2 = new LinkedList<TraceItem>();
 
@@ -226,7 +224,7 @@ public class TraceTreeTest {
         int[] outcome2 = {5};
 
         // non-empty tree
-        tree.augment(trace2, outcome2);
+        tree.augment(trace2, Route.toPorts(outcome2));
 
         assertNotNull(tree.root);
         V node3 = (V) node.getChild(3);
@@ -239,7 +237,7 @@ public class TraceTreeTest {
         assertTrue(node3.getChild(0x05) instanceof L);
         L leaf2 = (L) node3.getChild(0x05);
         assertNotEquals(leaf2.outcome, outcome);
-        assertEquals(leaf2.outcome, outcome2);
+        assertArrayEquals(leaf2.outcome, outcome2);
     }
 
 
@@ -263,34 +261,33 @@ public class TraceTreeTest {
 
         TraceTree tree;
         LinkedList<Rule> rulesExpected;
-        LinkedList<Action> actions;
+        Action action;
         LinkedList<TraceItem> trace;
 
         tree = new TraceTree();
         rulesExpected = new LinkedList<Rule>();
-        rulesExpected.add(new Rule(0, Match.matchAny(), Rule.punt()));
+        rulesExpected.add(new Rule(0, Match.matchAny(), Action.Punt()));
         assertNotNull(tree.compile());
         assertEquals(rulesExpected, tree.compile());
 
         rulesExpected = new LinkedList<Rule>();
-        actions = new LinkedList<Action>();
-        actions.add(Action.ToPort(1));
-        actions.add(Action.ToPort(2));
-        actions.add(Action.ToPort(3));
-        rulesExpected.add(new Rule(0, Match.matchAny(), actions));
+        action = Action.ToPorts(1,2,3);
+        // actions.add(Action.ToPort(2));
+        // actions.add(Action.ToPort(3));
+        rulesExpected.add(new Rule(0, Match.matchAny(), action));
         LinkedList<TraceItem> emptyTrace = new LinkedList<TraceItem>();
         int[] outcome = {1,2,3};
-        tree.augment(emptyTrace, outcome);
+        tree.augment(emptyTrace, Route.toPorts(outcome));
         assertEquals(rulesExpected, tree.compile());
 
         tree = new TraceTree();
         trace = new LinkedList<TraceItem>();
         trace.add(TraceItem.inPort(PORT));
-        tree.augment(trace, outcome);
+        tree.augment(trace, Route.toPorts(outcome));
         rulesExpected = new LinkedList<Rule>();
         rulesExpected.add(new Rule(0,
                 Match.matchAny().add(TraceItem.inPort(PORT)),
-                actions));
+                action));
         assertEquals(rulesExpected, tree.compile());
     }
 
@@ -301,27 +298,24 @@ public class TraceTreeTest {
 
         TraceTree tree;
         LinkedList<Rule> rulesExpected;
-        LinkedList<Action> actions;
+        Action action;
         LinkedList<TraceItem> trace;
 
         // null tree.compile() equals to rulesExpected blank
         tree = new TraceTree();
         rulesExpected = new LinkedList<Rule>();
-        rulesExpected.add(new Rule(0, Match.matchAny(), Rule.punt()));
+        rulesExpected.add(new Rule(0, Match.matchAny(), Action.Punt()));
         assertNotNull(tree.compile());
         assertEquals(rulesExpected, tree.compile());
 
         trace = new LinkedList<TraceItem>();
         trace.add(TraceItem.inPort(PORT));
         int[] outcome = {1, 2, 3};
-        tree.augment(trace, outcome);
+        tree.augment(trace, Route.toPorts(outcome));
 
         rulesExpected = new LinkedList<Rule>();
-        actions = new LinkedList<Action>();
-        actions.add(Action.ToPort(1));
-        actions.add(Action.ToPort(2));
-        actions.add(Action.ToPort(3));
-        rulesExpected.add(new Rule(0, Match.matchAny().add(TraceItem.inPort(PORT)), actions));
+        action = Action.ToPorts(1,2,3);
+        rulesExpected.add(new Rule(0, Match.matchAny().add(TraceItem.inPort(PORT)), action));
 
         assertEquals(rulesExpected, tree.compile());
 

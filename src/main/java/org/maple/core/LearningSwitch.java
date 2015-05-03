@@ -4,6 +4,7 @@
 
 package org.maple.core;
 
+import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,15 +19,15 @@ public class LearningSwitch extends MapleFunction {
   }
 
   @Override
-  public int onPacket(Packet p) {
+  public Route onPacket(Packet p) {
     long src_mac = p.ethSrc();
     MacTable.put(src_mac,p.ingressPort());
     long dst_mac = p.ethDst();
     if(MacTable.containsKey(dst_mac)==false) {
-      return Integer.MAX_VALUE;
+      return Route.toPorts(ports());
     }else {
       int dst_portID = MacTable.get(dst_mac);
-      return dst_portID;
+      return Route.toPorts(dst_portID);
     }
   }
 }
