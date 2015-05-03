@@ -45,7 +45,7 @@ public class MapleSystem {
    * @param port the reference to the port went up
    */
   public void portUp(int port) {
-    System.out.println("MapleSystem.portUp(" + port +")");
+    // System.out.println("MapleSystem.portUp(" + port +")");
     ports.add(port);
     userFunction.ports.add(port);
   };
@@ -55,7 +55,7 @@ public class MapleSystem {
    * @param port the reference to the port went down
    */
   public void portDown(int port) {
-    System.out.println("MapleSystem.portDown(" + port +")");    
+    // System.out.println("MapleSystem.portDown(" + port +")");    
     ports.remove(port);
     userFunction.ports.remove(port);    
   };
@@ -67,18 +67,18 @@ public class MapleSystem {
    * @param inPort refernce to the ingress port
    */
   public void handlePacket(byte[] data, int inSwitch, int inPort) {
-    System.out.println("Maple received a packet with inPort: " +
-                       inPort + " and frame len: " + data.length);
+    /* System.out.println("Maple received a packet with inPort: " +
+       inPort + " and frame len: " + data.length); */
 
     Ethernet frame = new Ethernet();
     frame.deserialize(data, 0, data.length);
-    System.out.println("handlePacket.frame: " + frame);
+    // System.out.println("handlePacket.frame: " + frame);
 
     Packet p = new Packet(frame, inPort);
 
     Route out = userFunction.onPacket(p);
     
-    System.out.println("User's MapleFunction returned: " + out + " with trace: " + traceString(p.trace));
+    // System.out.println("User's MapleFunction returned: " + out + " with trace: " + traceString(p.trace));
 
     traceTree.augment(p.trace, out);
 
