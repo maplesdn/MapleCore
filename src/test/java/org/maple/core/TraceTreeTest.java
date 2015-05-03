@@ -81,7 +81,7 @@ public class TraceTreeTest {
     
   }
 
-/*
+
   @Test
   // empty tree augmented by non-empty trace(one inPort and one ethDst) with outcome
   // non-empty tree augmented by non-empty trace 
@@ -182,8 +182,8 @@ public class TraceTreeTest {
     assertNotNull(node2.getChild(0x02));
     assertTrue(node2.getChild(0x02) instanceof L);
   }
-*/
-/*
+
+
 
   @Test
   // empty tree augmented by non-empty trace(one inPort and one ethDst) with outcome
@@ -234,7 +234,7 @@ public class TraceTreeTest {
     assertEquals(node3.getChild(0x05).outcome, outcome2);  
   }
 
-*/
+
 
 
 

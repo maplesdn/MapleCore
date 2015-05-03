@@ -5,7 +5,6 @@
 package org.maple.core;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
@@ -76,19 +75,11 @@ public class MapleSystem {
     Packet p = new Packet(frame, inPort);
 
     int out = userFunction.onPacket(p);
-
-    if (out==Integer.MAX_VALUE) {
-      int[] outPorts = new int[ports.size()];
-      Iterator<Integer> portsIterator = ports.iterator();
-      int i = 0;
-      while(portsIterator.hasNext()) {
-        outPorts[i] = portsIterator.next();
-      }
+    
     System.out.println("User's MapleFunction returned: " + out + " with trace: " + traceString(p.trace));
-    traceTree.augment(p.trace, outPorts);
-    } else {
-        traceTree.augment(p.trace, out);
-    }
+
+    traceTree.augment(p.trace, out);
+
     controller.sendPacket(data, inSwitch, inPort, out);
     controller.installRules(traceTree.compile(),inSwitch);
   }
