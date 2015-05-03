@@ -184,61 +184,6 @@ public class TraceTreeTest {
   }
 
 
-
-  @Test
-  // empty tree augmented by non-empty trace(one inPort and one ethDst) with outcome
-  // then augmented by non-empty trace(one different inPort and one ethDst) with outcome
-  public void testAugment5() {
-    TraceTree tree = new TraceTree();
-
-    assertNull(tree.root);
-
-    LinkedList<TraceItem> trace = new LinkedList<TraceItem>();
-
-    trace.add(TraceItem.inPort(1));
-    trace.add(TraceItem.ethDst(0x02));
-    int[] outcome={2};
-
-    tree.augment(trace, outcome);
-
-    assertNotNull(tree.root);
-    V node = (V) tree.root;
-    V node2 = node.getChild(1);
-    assertNotNull(node2);
-    assertTrue(node2 instanceof V);
-    assertEquals(node2.field, trace.get(1).field);
-    assertNull(node2.getChild(0x03));
-    assertTrue(node2.getChild(0x02) instanceof L);
-    assertEquals(node2.getChild(0x02).outcome, outcome);
-
-    LinkedList<TraceItem> trace2 = new LinkedList<TraceItem>();
-
-    trace2.add(TraceItem.inPort(3));
-    trace2.add(TraceItem.ethDst(0x05));
-    int[] outcome2 = {5};
-
-    // non-empty tree
-    tree.augment(trace2, outcome2);
-
-    assertNotNull(tree.root);
-    V node = (V) tree.root;
-    V node3 = node.getChild(3);
-
-    assertNotNull(node3);
-    assertTrue(node3 instanceof V);
-    assertEquals(node3.field, trace2.get(3).field);
-    assertNull(node3.getChild(0x03));
-    assertNull(node3.getChild(0x02));
-    assertTrue(node3.getChild(0x05) instanceof L);
-    assertNotEquals(node3.getChild(0x05).outcome, outcome);
-    assertEquals(node3.getChild(0x05).outcome, outcome2);  
-  }
-
-
-
-
-
-
   @Test
   public void testItemEq() {
     assertEquals(TraceItem.ethSrc(1),  TraceItem.ethSrc(1));
