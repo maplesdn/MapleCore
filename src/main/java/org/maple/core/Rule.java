@@ -24,6 +24,19 @@ public class Rule {
         actions.equals(other2.actions);
   }
 
+  @Override
+  public String toString() {
+    String str = "Rule (Priority: ";
+    str+= priority;
+    str+=", ";
+    str+=match.toString();
+    str+=", ";
+    for(Action action : actions)
+      str+=action.toString();
+    str+=")";
+    return str;
+  }
+
   public static LinkedList<Action> punt() {
     LinkedList<Action> as = new LinkedList<Action>();
     as.add(Action.Punt());

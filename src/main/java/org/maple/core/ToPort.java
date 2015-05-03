@@ -20,4 +20,8 @@ public class ToPort extends Action {
     result = prime * result + portID;
     return result;
   }
+  @Override
+  public String toString() {
+    return "ToPort: "+portID + "; ";
+  }
 }

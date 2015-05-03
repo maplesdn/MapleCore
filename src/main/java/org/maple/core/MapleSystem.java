@@ -82,6 +82,18 @@ public class MapleSystem {
 
     controller.sendPacket(data, inSwitch, inPort, out);
     controller.installRules(traceTree.compile(),inSwitch);
+
+    //TODO
+    // oldRules = currentRules (defined currentRules in this object).
+    // currentRules = traceTree.compile();
+    // Diff diff = diff(oldRules, currentRules);
+    // deleteRules(diff.removed);
+    // installRules(diff.added); 
+  }
+
+  
+  public Diff diff(LinkedList<Rule> oldRules, LinkedList<Rule> newRules) {
+    return new Diff(new LinkedList<Rule>(), new LinkedList<Rule>());
   }
 
   String traceString(LinkedList<TraceItem> trace) {
