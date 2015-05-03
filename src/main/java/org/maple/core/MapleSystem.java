@@ -15,7 +15,7 @@ public class MapleSystem {
   private Controller controller;
   private MapleFunction userFunction;
   TraceTree traceTree;
-
+  LinkedList<Rule> currentRules;
   HashSet<Integer> ports;
 
   /**
@@ -26,6 +26,7 @@ public class MapleSystem {
   public MapleSystem(Controller c) {
 
     traceTree = new TraceTree();
+    currentRules = new LinkedList<Rule>();
     ports = new HashSet<Integer>();
     
     if (c == null)
@@ -83,14 +84,13 @@ public class MapleSystem {
     traceTree.augment(p.trace, out);
 
     controller.sendPacket(data, inSwitch, inPort, listToArray(out.ports));
-    controller.installRules(traceTree.compile(),inSwitch);
 
-    //TODO
-    // oldRules = currentRules (defined currentRules in this object).
-    // currentRules = traceTree.compile();
-    // Diff diff = diff(oldRules, currentRules);
-    // deleteRules(diff.removed);
-    // installRules(diff.added); 
+    // Inform controller of updated rule sets.
+    LinkedList<Rule> oldRules = currentRules;
+    currentRules = traceTree.compile();
+    Diff diff = diff(oldRules, currentRules);
+    controller.deleteRules(diff.removed, inSwitch);
+    controller.installRules(diff.added, inSwitch); 
   }
 
 
