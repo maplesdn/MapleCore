@@ -108,14 +108,13 @@ public class TraceTreeTest {
 
     assertNotNull(tree.root);
     V node = (V) tree.root;
-    V node2 = (V) node.getChild(1);
+    V node2 = node.getChild(1);
     assertNotNull(node2);
     assertTrue(node2 instanceof V);
-    // assertEquals(node2.field, trace.get(1).field);
+    assertEquals(node2.field, trace.get(1).field);
     assertNull(node2.getChild(0x03));
     assertTrue(node2.getChild(0x02) instanceof L);
-    L leaf = (L) node2.getChild(0x02);
-    assertEquals(leaf.outcome, outcome);
+    assertEquals(node2.getChild(0x02).outcome, outcome);
 
     LinkedList<TraceItem> trace2 = new LinkedList<TraceItem>();
 
@@ -125,24 +124,24 @@ public class TraceTreeTest {
 
     // non-empty tree
     tree.augment(trace2, outcome2);
-    node = (V) tree.root;
-    node2 = (V) node.getChild(1);
 
     assertNotNull(tree.root);
+    V node = (V) tree.root;
+    V node2 = node.getChild(1);
 
     // make sure tree.root.getChild(1) keeps the same
     assertNotNull(node2);
     assertTrue(node2 instanceof V);
-    // assertEquals(node2.field, trace.get(1).field);
+    assertEquals(node2.field, trace.get(1).field);
     assertNull(node2.getChild(0x03));
+    assertNotNull(node2.getChild(0x02));
     assertTrue(node2.getChild(0x02) instanceof L);
 
     // test tree.root.getChild(1).getChild(0x05)
     assertNotNull(node2.getChild(0x05));
     assertTrue(node2.getChild(0x05) instanceof L);
-    L leaf2 = (L) node2.getChild(0x05);
-    assertNotEquals(leaf2.outcome, outcome);
-    assertEquals(leaf2.outcome, outcome2);
+    assertNotEquals(node2.getChild(0x05).outcome, outcome);
+    assertEquals(node2.getChild(0x05).outcome, outcome2);
   }
 
 
@@ -164,14 +163,13 @@ public class TraceTreeTest {
 
     assertNotNull(tree.root);
     V node = (V) tree.root;
-    V node2 = (V) node.getChild(1);
+    V node2 = node.getChild(1);
     assertNotNull(node2);
     assertTrue(node2 instanceof V);
-    // assertEquals(node2.field, trace.get(1).field);
+    assertEquals(node2.field, trace.get(1).field);
     assertNull(node2.getChild(0x03));
     assertTrue(node2.getChild(0x02) instanceof L);
-    L leaf = (L) node2.getChild(0x02);
-    assertEquals(leaf.outcome, outcome);
+    assertEquals(node2.getChild(0x02).outcome, outcome);
 
     LinkedList<TraceItem> trace2 = new LinkedList<TraceItem>();
 
@@ -181,11 +179,13 @@ public class TraceTreeTest {
     tree.augment(trace2, outcome2);
 
     assertNotNull(tree.root);
+    V node = (V) tree.root;
+    V node2 = node.getChild(1);
 
     // make sure tree.root.getChild(1) keeps the same
     assertNotNull(node2);
     assertTrue(node2 instanceof V);
-    // assertEquals(node2.field, trace.get(1).field);
+    assertEquals(node2.field, trace.get(1).field);
     assertNull(node2.getChild(0x03));
     assertNotNull(node2.getChild(0x02));
     assertTrue(node2.getChild(0x02) instanceof L);
@@ -210,14 +210,13 @@ public class TraceTreeTest {
 
     assertNotNull(tree.root);
     V node = (V) tree.root;
-    V node2 = (V) node.getChild(1);
+    V node2 = node.getChild(1);
     assertNotNull(node2);
     assertTrue(node2 instanceof V);
-    // assertEquals(node2.field, trace.get(1).field);
+    assertEquals(node2.field, trace.get(1).field);
     assertNull(node2.getChild(0x03));
     assertTrue(node2.getChild(0x02) instanceof L);
-    L leaf = (L) node2.getChild(0x02);
-    assertEquals(leaf.outcome, outcome);
+    assertEquals(node2.getChild(0x02).outcome, outcome);
 
     LinkedList<TraceItem> trace2 = new LinkedList<TraceItem>();
 
@@ -229,17 +228,17 @@ public class TraceTreeTest {
     tree.augment(trace2, outcome2);
 
     assertNotNull(tree.root);
-    V node3 = (V) node.getChild(3);
+    V node = (V) tree.root;
+    V node3 = node.getChild(3);
 
     assertNotNull(node3);
     assertTrue(node3 instanceof V);
-    // assertEquals(node3.field, trace2.get(3).field);
+    assertEquals(node3.field, trace2.get(3).field);
     assertNull(node3.getChild(0x03));
     assertNull(node3.getChild(0x02));
     assertTrue(node3.getChild(0x05) instanceof L);
-    L leaf2 = (L) node3.getChild(0x05);
-    assertNotEquals(leaf2.outcome, outcome);
-    assertEquals(leaf2.outcome, outcome2);  
+    assertNotEquals(node3.getChild(0x05).outcome, outcome);
+    assertEquals(node3.getChild(0x05).outcome, outcome2);  
   }
 
 
