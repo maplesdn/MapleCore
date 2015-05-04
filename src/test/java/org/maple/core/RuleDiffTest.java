@@ -28,6 +28,15 @@ public class RuleDiffTest {
         assertTrue(!rule1.equals(rule4));
     }
 
+  @Test
+  public void TestDiffEquals() {
+    Diff diff1 = new Diff(new LinkedList<Rule>(), new LinkedList<Rule>());
+    Diff diff2 = new Diff(new LinkedList<Rule>(), new LinkedList<Rule>());
+    assertTrue(diff1 != null);
+    assertTrue(diff2 != null);    
+    assertEquals(diff1, diff2);
+  }
+  
     public void TestDiff1() {
         LinkedList<Rule> oldRules = new LinkedList<Rule>();
 
