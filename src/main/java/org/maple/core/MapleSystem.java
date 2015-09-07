@@ -6,6 +6,7 @@ package org.maple.core;
 
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.ListIterator;
 
 /**
  * Maple System is the runtime system which should be initiated on the SDN controller side
@@ -79,7 +80,7 @@ public class MapleSystem {
 
     Route out = userFunction.onPacket(p);
     
-    // System.out.println("User's MapleFunction returned: " + out + " with trace: " + traceString(p.trace));
+    //System.out.println("User's MapleFunction returned: "  + "Trace: " + traceString(p.trace) + out);
 
     traceTree.augment(p.trace, out);
 
@@ -88,11 +89,19 @@ public class MapleSystem {
     // Inform controller of updated rule sets.
     LinkedList<Rule> oldRules = currentRules;
     currentRules = traceTree.compile();
+    
+    // Print out all of the rules for testing.
+    //ListIterator<Rule> ruleIterator = currentRules.listIterator();
+    //System.out.println("==== Rule Generated ====");
+    //while (ruleIterator.hasNext()) {
+    //	System.out.println(ruleIterator.next());
+    //}
+    //System.out.println("====      ====");
+    
     Diff diff = diff(oldRules, currentRules);
     controller.deleteRules(diff.removed, inSwitch);
     controller.installRules(diff.added, inSwitch); 
   }
-
 
   int[] listToArray(LinkedList<Integer> input) {
     int[] output = new int[input.size()];
