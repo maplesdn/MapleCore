@@ -25,9 +25,16 @@ public class V extends Node {
       if(getChild(next.value)!=null)
         getChild(next.value).augment(trace,ports);
       else {
-        V child = new V();
-        subtree.put(next.value,child);
-        child.augment(trace, ports);
+        if (trace.get(0) instanceof TraceItemT ) {
+          T child = new T();
+          subtree.put(next.value,child);
+          child.augment(trace, ports);
+        }
+        else {
+          V child = new V();
+          subtree.put(next.value,child);
+          child.augment(trace, ports);
+        }
       }
     }
   }
