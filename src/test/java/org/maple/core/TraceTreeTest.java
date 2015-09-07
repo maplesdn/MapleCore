@@ -55,7 +55,7 @@ public class TraceTreeTest {
 
 
         LinkedList<TraceItem> trace = new LinkedList<TraceItem>();
-        trace.add(TraceItem.inPort(PORT));  // trace's field inPort is PORT
+        trace.add(TraceItemV.inPort(PORT));  // trace's field inPort is PORT
         int[] outcome = {1,2,3};
         tree.augment(trace, Route.toPorts(outcome));
 
@@ -98,8 +98,8 @@ public class TraceTreeTest {
 
         LinkedList<TraceItem> trace = new LinkedList<TraceItem>();
 
-        trace.add(TraceItem.inPort(1));
-        trace.add(TraceItem.ethDst(0x02));
+        trace.add(TraceItemV.inPort(1));
+        trace.add(TraceItemV.ethDst(0x02));
         int[] outcome={2};
 
         tree.augment(trace, Route.toPorts(outcome));
@@ -117,8 +117,8 @@ public class TraceTreeTest {
 
         LinkedList<TraceItem> trace2 = new LinkedList<TraceItem>();
 
-        trace2.add(TraceItem.inPort(1));
-        trace2.add(TraceItem.ethDst(0x05));
+        trace2.add(TraceItemV.inPort(1));
+        trace2.add(TraceItemV.ethDst(0x05));
         int[] outcome2 = {5};
 
         // non-empty tree
@@ -154,8 +154,8 @@ public class TraceTreeTest {
 
         LinkedList<TraceItem> trace = new LinkedList<TraceItem>();
 
-        trace.add(TraceItem.inPort(1));
-        trace.add(TraceItem.ethDst(0x02));
+        trace.add(TraceItemV.inPort(1));
+        trace.add(TraceItemV.ethDst(0x02));
         int[] outcome={2};
 
         tree.augment(trace, Route.toPorts(outcome));
@@ -200,8 +200,8 @@ public class TraceTreeTest {
 
         LinkedList<TraceItem> trace = new LinkedList<TraceItem>();
 
-        trace.add(TraceItem.inPort(1));
-        trace.add(TraceItem.ethDst(0x02));
+        trace.add(TraceItemV.inPort(1));
+        trace.add(TraceItemV.ethDst(0x02));
         int[] outcome={2};
 
         tree.augment(trace, Route.toPorts(outcome));
@@ -219,8 +219,8 @@ public class TraceTreeTest {
 
         LinkedList<TraceItem> trace2 = new LinkedList<TraceItem>();
 
-        trace2.add(TraceItem.inPort(3));
-        trace2.add(TraceItem.ethDst(0x05));
+        trace2.add(TraceItemV.inPort(3));
+        trace2.add(TraceItemV.ethDst(0x05));
         int[] outcome2 = {5};
 
         // non-empty tree
@@ -251,8 +251,8 @@ public class TraceTreeTest {
 
     @Test
     public void testItemEq() {
-        assertEquals(TraceItem.ethSrc(1),  TraceItem.ethSrc(1));
-        assertNotEquals(TraceItem.ethSrc(1),  TraceItem.ethSrc(2));
+        assertEquals(TraceItemV.ethSrc(1),  TraceItemV.ethSrc(1));
+        assertNotEquals(TraceItemV.ethSrc(1),  TraceItemV.ethSrc(2));
     }
 
     @Test
@@ -282,11 +282,11 @@ public class TraceTreeTest {
 
         tree = new TraceTree();
         trace = new LinkedList<TraceItem>();
-        trace.add(TraceItem.inPort(PORT));
+        trace.add(TraceItemV.inPort(PORT));
         tree.augment(trace, Route.toPorts(outcome));
         rulesExpected = new LinkedList<Rule>();
         rulesExpected.add(new Rule(0,
-                Match.matchAny().add(TraceItem.inPort(PORT)),
+                Match.matchAny().add(TraceItemV.inPort(PORT)),
                 action));
         assertEquals(rulesExpected, tree.compile());
     }
@@ -309,13 +309,13 @@ public class TraceTreeTest {
         assertEquals(rulesExpected, tree.compile());
 
         trace = new LinkedList<TraceItem>();
-        trace.add(TraceItem.inPort(PORT));
+        trace.add(TraceItemV.inPort(PORT));
         int[] outcome = {1, 2, 3};
         tree.augment(trace, Route.toPorts(outcome));
 
         rulesExpected = new LinkedList<Rule>();
         action = Action.ToPorts(1,2,3);
-        rulesExpected.add(new Rule(0, Match.matchAny().add(TraceItem.inPort(PORT)), action));
+        rulesExpected.add(new Rule(0, Match.matchAny().add(TraceItemV.inPort(PORT)), action));
 
         assertEquals(rulesExpected, tree.compile());
 
