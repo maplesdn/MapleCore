@@ -48,15 +48,25 @@ public class MapleTestTest {
                       43,44,45,46,47,48,49,50,51,52,53,54,55};
         byte[] frameBytes = makeFrameBytes(data);
 
-        int ingressPort = 23;
+        int ingressPort = 1;
         int switchID = 42;
 
         mapleSystem.portUp(23);
         mapleSystem.portUp(24);
         mapleSystem.portUp(25);        
         mapleSystem.handlePacket(frameBytes, switchID, ingressPort);
+        
+        
+        // Sample ARP packet. Who has 192.168.1.254?  Tell 192.168.1.103
+        int[] data2 = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x8c, 0x70, 0x5a, 0x35, 0x6d, 0x1c, 0x08, 0x06, 0x00, 0x01,
+        		      0x08, 0x00, 0x06, 0x04, 0x00, 0x01, 0x8c, 0x70, 0x5a, 0x35, 0x6d, 0x1c, 0xc0, 0xa8, 0x01, 0x67,
+        		      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc0, 0xa8, 0x01, 0xfe};
+        byte[] frameBytes2 = makeFrameBytes(data2);
 
+       ingressPort = 10;
+       switchID = 40;
 
+       mapleSystem.handlePacket(frameBytes2, switchID, ingressPort);
         // assertTrue(c.sendPacket(data, out));
     }
 
