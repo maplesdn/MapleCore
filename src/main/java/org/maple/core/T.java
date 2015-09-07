@@ -24,34 +24,36 @@ public class T extends Node {
       return;
     }
     TraceItem next = trace.remove(0);
-    System.out.println("trace2tree2" + next);
     field = next.field;
     value = next.value;
+
     if (trace.size()==0) {  // Add leaf node. 
       if (next.Tvalue == true)
         subtree[POS_BRANCH] = new L(ports); 
       else {
         subtree[NEG_BRANCH] = new L(ports);	
       }
-    } else { // Augment trace recursively.
-    	if(getChild(next.Tvalue)!= null)  
-    	  getChild(next.Tvalue).augment(trace, ports);
-        else { // Child is empty
-          if ( trace.get(0) instanceof TraceItemT ) {
-            T child = new T();
-            subtree[next.Tvalue? POS_BRANCH : NEG_BRANCH] = child;
-            child.augment(trace, ports);
-          }
-          else if ( trace.get(0) instanceof TraceItemV ) {
-            V child = new V();
-            subtree[next.Tvalue? POS_BRANCH : NEG_BRANCH] = child;
-            child.augment(trace, ports);
-          }
-          else {
-            System.out.println("Error in T.augment: Unknown type of TraceItem."); //FIXME:TODO: I hate this. Replace println with a uniform LOG module.
-          }
-        } // End of child is empty
-    }
+    } 
+    else { // Augment trace recursively.
+      if(getChild(next.Tvalue)!= null)  
+        getChild(next.Tvalue).augment(trace, ports);
+      else { // Child is empty
+        if ( trace.get(0) instanceof TraceItemT ) {
+          T child = new T();
+          subtree[next.Tvalue? POS_BRANCH : NEG_BRANCH] = child;
+          child.augment(trace, ports);
+        }
+        else if ( trace.get(0) instanceof TraceItemV ) {
+          V child = new V();
+          subtree[next.Tvalue? POS_BRANCH : NEG_BRANCH] = child;
+          child.augment(trace, ports);
+        }
+        else {
+          //FIXME:TODO: Replace println with a uniform LOG module.
+          System.out.println("Error in T.augment: Unknown type of TraceItem."); 
+        }
+      } // End of child is empty
+    } // End of Augment trace recursively
   }
   
   public int[] evaluate(int inPort, Ethernet frame) {
