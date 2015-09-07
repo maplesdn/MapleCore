@@ -20,24 +20,46 @@ public class Packet {
 
   public final long ethSrc() {
     long addr = Ethernet.toLong(frame.getSourceMACAddress());
-    trace.add(TraceItem.ethSrc(addr));
+    trace.add(TraceItemV.ethSrc(addr));
     return addr;
   }
 
   public final long ethDst() {
     long addr = Ethernet.toLong(frame.getDestinationMACAddress());
-    trace.add(TraceItem.ethDst(addr));
+    trace.add(TraceItemV.ethDst(addr));
     return addr;
   }
 
   public final int ethType() {
-    trace.add(TraceItem.ethType(frame.getEtherType()));
+    trace.add(TraceItemV.ethType(frame.getEtherType()));
     return frame.getEtherType();
   }
 
   public final int ingressPort() {
-    trace.add(TraceItem.inPort(ingressPort));
+    trace.add(TraceItemV.inPort(ingressPort));
     return ingressPort;
+  }
+  
+  public final boolean ethSrcIs(long exp) {
+    long addr = Ethernet.toLong(frame.getSourceMACAddress());
+    trace.add(TraceItemT.ethSrcIs(addr, exp));
+    return (addr==exp);
+  }
+
+  public final boolean ethDstIs(long exp) {
+    long addr = Ethernet.toLong(frame.getDestinationMACAddress());
+    trace.add(TraceItemT.ethDstIs(addr, exp));
+    return (addr==exp);
+  }
+
+  public final boolean ethTypeIs(int exp) {
+    trace.add(TraceItemT.ethTypeIs(frame.getEtherType(), exp));
+    return (frame.getEtherType() == exp);
+  }
+
+  public final boolean ingressPortIs(int exp) {
+    trace.add(TraceItemT.inPortIs(ingressPort, exp));
+    return (ingressPort==exp);
   }
 
   @Override
