@@ -1,10 +1,11 @@
 package org.maple.core;
+import java.util.HashSet;
 import java.util.LinkedList;
 public class Diff {
-  public LinkedList<Rule> removed;  // = old - new
-  public LinkedList<Rule> added;    // = new - old
+  public HashSet<Rule> removed;  // = old - new
+  public HashSet<Rule> added;    // = new - old
 
-  public Diff (LinkedList<Rule> removed, LinkedList<Rule> added) {
+  public Diff (HashSet<Rule> removed, HashSet<Rule> added) {
     this.removed = removed;
     this.added   = added;
   }

@@ -51,11 +51,11 @@ public class TraceItemT extends TraceItem {
     return item;
   }
 
-  public static TraceItemT inPortIs(int port, int exp) {
+  public static TraceItemT inPortIs(SwitchPort port, SwitchPort exp) {
     TraceItemT item = new TraceItemT();
     item.field = TraceItemT.Field.IN_PORT;
-    item.value = exp;
-    item.Tvalue = (port == exp);
+    item.value = exp.hashCode();
+    item.Tvalue = (port.equals(exp));
     return item;
   }
 }

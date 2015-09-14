@@ -8,6 +8,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 
 public class MapleTestTest {
@@ -27,13 +29,13 @@ public class MapleTestTest {
         System.out.println("Test if handlePacket method can successfully send packet");
 
         Controller c = new Controller() {
-            public void sendPacket(byte[] data, int inSwitch, int inPort, int... ports) {
+            public void sendPacket(byte[] data, Switch inSwitch, SwitchPort inPort, SwitchPort... ports) {
               System.out.println("In sendPacket");
             }
-            public void installRules(LinkedList<Rule> rules, int... outSwitches) {
+            public void installRules(HashSet<Rule> rules, Switch... outSwitches) {
                 System.out.println("In installRules");
             }
-            public void deleteRules(LinkedList<Rule> rules, int... outSwitches) {
+            public void deleteRules(HashSet<Rule> rules, Switch... outSwitches) {
                 System.out.println("In deleteRules");
             }
           };
@@ -48,13 +50,17 @@ public class MapleTestTest {
                       43,44,45,46,47,48,49,50,51,52,53,54,55};
         byte[] frameBytes = makeFrameBytes(data);
 
-        int ingressPort = 1;
-        int switchID = 42;
-
-        mapleSystem.portUp(23);
-        mapleSystem.portUp(24);
-        mapleSystem.portUp(25);        
-        mapleSystem.handlePacket(frameBytes, switchID, ingressPort);
+        int ingressPortID = 1;
+        long switchID = 42;
+        SwitchPort ingressPort = new SwitchPort(switchID,1);
+        Switch sw = new Switch(switchID);
+        SwitchPort sp23 = new SwitchPort(switchID ,23);
+        SwitchPort sp24 = new SwitchPort(switchID, 24);
+        SwitchPort sp25 = new SwitchPort(switchID, 25);
+        mapleSystem.portUp(sp23);
+        mapleSystem.portUp(sp24);
+        mapleSystem.portUp(sp25);
+        mapleSystem.handlePacket(frameBytes, sw, ingressPort);
         
         
         // Sample ARP packet. Who has 192.168.1.254?  Tell 192.168.1.103
@@ -63,10 +69,12 @@ public class MapleTestTest {
         		      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc0, 0xa8, 0x01, 0xfe};
         byte[] frameBytes2 = makeFrameBytes(data2);
 
-       ingressPort = 10;
-       switchID = 40;
+        ingressPort = new SwitchPort(switchID,10);
+        switchID = 40;
+        Switch sw40 = new Switch(switchID);
 
-       mapleSystem.handlePacket(frameBytes2, switchID, ingressPort);
+
+       mapleSystem.handlePacket(frameBytes2, sw40, ingressPort);
         // assertTrue(c.sendPacket(data, out));
     }
 

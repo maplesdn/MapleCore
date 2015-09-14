@@ -13,7 +13,7 @@ public class V extends Node {
     return subtree.get(value);
   }
 
-  public void augment(List<TraceItem> trace, int... ports) {
+  public void augment(List<TraceItem> trace, SwitchPort... ports) {
     if (trace.isEmpty()) {
       return;
     }
@@ -39,7 +39,7 @@ public class V extends Node {
     }
   }
   
-  public int[] evaluate(int inPort, Ethernet frame) {
+  public SwitchPort[] evaluate(SwitchPort inPort, Ethernet frame) {
     Long value = extractField(field, inPort, frame);
     assert value != null;
     Node n = subtree.get(value);
@@ -50,9 +50,9 @@ public class V extends Node {
     }
   }
 
-  Long extractField(TraceItem.Field fld, int inPort, Ethernet frame) {
+  Long extractField(TraceItem.Field fld, SwitchPort inPort, Ethernet frame) {
     switch (fld) {
-      case IN_PORT: return (long) inPort;
+      case IN_PORT: return (long) inPort.hashCode();
       case ETH_SRC: return Ethernet.toLong(frame.getSourceMACAddress());
       case ETH_DST: return Ethernet.toLong(frame.getDestinationMACAddress());
       case ETH_TYPE: return (long) frame.getEtherType();

@@ -12,10 +12,10 @@ import java.util.Map;
  * Example user defined algorithm policy which simple simulates the behaviour of a learing switch
  */
 public class LearningSwitch extends MapleFunction {
-  private Map<Long, Integer> MacTable;
+  private Map<Long, SwitchPort> MacTable;
 
   public LearningSwitch() {
-    MacTable = new HashMap<Long, Integer>();
+    MacTable = new HashMap<Long, SwitchPort>();
   }
 
   @Override
@@ -26,7 +26,7 @@ public class LearningSwitch extends MapleFunction {
     if(MacTable.containsKey(dst_mac)==false) {
       return Route.toPorts(ports());
     }else {
-      int dst_portID = MacTable.get(dst_mac);
+      SwitchPort dst_portID = MacTable.get(dst_mac);
       return Route.toPorts(dst_portID);
     }
   }

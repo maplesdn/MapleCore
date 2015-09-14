@@ -1,8 +1,11 @@
 package org.maple.core;
+import java.util.Arrays;
+import java.util.HashSet;
+
 
 public class ToPorts extends Action {
-  public int[] portIDs;
-  public ToPorts(int... portIDs) {
+  public SwitchPort[] portIDs;
+  public ToPorts(SwitchPort... portIDs) {
     this.portIDs = portIDs;
   }
   
@@ -11,11 +14,11 @@ public class ToPorts extends Action {
     if (null == other) { return false; }
     if (other instanceof ToPorts) {
       ToPorts other2 = (ToPorts) other;
-      if (portIDs.length != other2.portIDs.length) { return false; }
-      for (int i = 0; i < portIDs.length; i++) {
-        if (portIDs[i] != other2.portIDs[i]) { return false; }
-      }
-      return true;
+      HashSet<SwitchPort> ports = new HashSet<SwitchPort>(Arrays.asList(portIDs));
+      HashSet<SwitchPort> ports2 = new HashSet<SwitchPort>(Arrays.asList(other2.portIDs));
+      if (ports.equals(ports2)) return true;
+      else
+      return false;
     } else {
       return false;
     }
@@ -25,8 +28,8 @@ public class ToPorts extends Action {
   public int hashCode() {
     final int prime = 5557;
     int result = 1;
-    for (int p : portIDs) {
-      result = prime * result + p;
+    for (SwitchPort p : portIDs) {
+      result = prime * result + p.getPort();
     }
     return result;
   }

@@ -19,7 +19,7 @@ public class T extends Node {
       return subtree[NEG_BRANCH];
   }
 
-  public void augment(List<TraceItem> trace, int... ports) {
+  public void augment(List<TraceItem> trace, SwitchPort... ports) {
     if (trace.isEmpty()) {
       return;
     }
@@ -56,7 +56,7 @@ public class T extends Node {
     } // End of Augment trace recursively
   }
   
-  public int[] evaluate(int inPort, Ethernet frame) {
+  public SwitchPort[] evaluate(SwitchPort inPort, Ethernet frame) {
     Long value2 = extractField(field, inPort, frame);
     assert value2 != null;
     Node n = subtree[(value == value2) ? POS_BRANCH : NEG_BRANCH];
@@ -67,9 +67,9 @@ public class T extends Node {
     }
   }
 
-  Long extractField(TraceItem.Field fld, int inPort, Ethernet frame) {
+  Long extractField(TraceItem.Field fld, SwitchPort inPort, Ethernet frame) {
     switch (fld) {
-      case IN_PORT: return (long) inPort;
+      case IN_PORT: return (long) inPort.getPort();
       case ETH_SRC: return Ethernet.toLong(frame.getSourceMACAddress());
       case ETH_DST: return Ethernet.toLong(frame.getDestinationMACAddress());
       case ETH_TYPE: return (long) frame.getEtherType();

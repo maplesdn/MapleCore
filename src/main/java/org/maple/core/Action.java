@@ -7,6 +7,6 @@ public class Action {
   private static Drop drop = new Drop();
   
   public static Action Punt() { return punt; }
-  public static Action ToPorts(int... portIDs) { return new ToPorts(portIDs); }
+  public static Action ToPorts(SwitchPort... portIDs) { return new ToPorts(portIDs); }
   public static Action Drop() { return drop; }
 }

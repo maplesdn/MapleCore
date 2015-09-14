@@ -8,11 +8,11 @@ import java.util.LinkedList;
  */
 public abstract class MapleFunction {
 
-  HashSet<Integer> ports = new HashSet<Integer>();
+  HashSet<SwitchPort> ports = new HashSet<SwitchPort>();
 
-  final public HashSet<Integer> ports() {
+  final public HashSet<SwitchPort> ports() {
     // make a copy:
-    return new HashSet<Integer>(ports);
+    return new HashSet<SwitchPort>(ports);
   }
 
   

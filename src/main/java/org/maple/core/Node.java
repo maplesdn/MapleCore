@@ -4,6 +4,6 @@ import java.util.List;
 
 public abstract class Node {
 
-  public abstract void augment(List<TraceItem> trace, int... ports);
-  public abstract int[] evaluate(int inPort, Ethernet frame);
+  public abstract void augment(List<TraceItem> trace, SwitchPort... ports);
+  public abstract SwitchPort[] evaluate(SwitchPort inPort, Ethernet frame);
 }

@@ -1,22 +1,15 @@
 package org.maple.core;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.ListIterator;
-import java.util.Set;
+import java.util.*;
 
 public class TraceTree {
 
   public Node root = null;
   public int priority = 0;
-  public LinkedList<Rule> rules;
+  public HashSet<Rule> rules;
 
   public void augment(List<TraceItem> trace, Route route) {
-    int[] portsArray = new int[route.ports.size()];
-    for (int i = 0; i < route.ports.size(); i++) {
-      portsArray[i] = route.ports.get(i);
-    }
+    SwitchPort[] portsArray = route.getEndPoints().toArray(new SwitchPort[0]);
     
     if(root==null) {
       root = trace2tree(trace, portsArray);
@@ -25,7 +18,7 @@ public class TraceTree {
     }
   }
 
-  public int[] evaluate(int inPort, Ethernet frame) {
+  public SwitchPort[] evaluate(SwitchPort inPort, Ethernet frame) {
     if (null==root) {
       return null;
     } else {
@@ -33,8 +26,8 @@ public class TraceTree {
     }
   }
 
-  public LinkedList<Rule> compile() {
-    rules = new LinkedList<Rule>();
+  public HashSet<Rule> compile() {
+    rules = new HashSet<Rule>();
     priority = 0;
     build(root, Match.matchAny());
     return rules;
@@ -107,7 +100,7 @@ public class TraceTree {
     }
   }
 
-  private Node trace2tree(List<TraceItem> trace, int... ports) {
+  private Node trace2tree(List<TraceItem> trace, SwitchPort... ports) {
     if (trace.isEmpty()) {
       return new L(ports);
     }

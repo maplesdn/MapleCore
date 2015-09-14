@@ -2,62 +2,52 @@ package org.maple.core;
 
 import java.util.LinkedList;
 import java.util.Collection;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Iterator;
 
 public class Route {
-  LinkedList<Integer> ports;
+  private HashSet<SwitchPort> ports;
+  public static final Route nullRoute = new Route();
 
   Route() {
-    this.ports = new LinkedList<Integer>();
+    this.ports = new HashSet<SwitchPort>();
   }
-  Route(LinkedList<Integer> ports) {
+  Route(HashSet<SwitchPort> ports) {
     this.ports = ports;
   }
   
   public static Route drop() {
-    return new Route();
+    return nullRoute;
   }
-  public static Route toPorts(Collection<Integer> ports) {
-    return new Route(new LinkedList<Integer>(ports));
+  public static Route toPorts(Collection<SwitchPort> ports) {
+    return new Route(new HashSet<SwitchPort>(ports));
   }
-  public static Route toPorts(int... ports) {
-    LinkedList<Integer> output = new LinkedList<Integer>();
+  public static Route toPorts(SwitchPort... ports) {
+    HashSet<SwitchPort> output = new HashSet<SwitchPort>();
     for (int i = 0; i < ports.length; i++) {
       output.add(ports[i]);
     }
     return new Route(output);
   }
 
-  
-  // TODO: This is quite inefficient; it would be better to use
-  // StringBuilder here.
-  @Override
-  public String toString() {
-
-    String start = "Route: [";
-    String end = "]";
-    String middle = "";
-
-    for (int i = 0; i < ports.size(); i++) {
-      middle += ports.get(i);
-      if (i < ports.size() - 1) { middle += ", "; }
-    }
-    
-    return start + middle + end;
+  public Collection<SwitchPort> getEndPoints() {
+    return this.ports;
   }
 
-  @Override
-  public boolean equals(Object other) {
+
+  public boolean equals(Route other) {
     if (null == other) { return false; }
-    Route other2 = (Route) other;
-    return ports.equals(other2.ports);
+    return ports.equals(other.ports);
   }
 
   @Override
   public int hashCode() {
     final int prime = 5557;
     int result = 1;
-    for (int p : ports) {
-      result = prime * result + p;
+    Iterator<SwitchPort> e = ports.iterator();
+    while (e.hasNext()) {
+      result = prime * result + e.next().hashCode();
     }
     return result;
   }

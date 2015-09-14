@@ -9,10 +9,10 @@ import java.util.LinkedList;
 public class Packet {
 
   Ethernet frame;
-  int ingressPort;
+  SwitchPort ingressPort;
   LinkedList<TraceItem> trace;
   
-  public Packet(Ethernet frame, int ingressPort) {
+  public Packet(Ethernet frame, SwitchPort ingressPort) {
     this.frame = frame;
     this.ingressPort = ingressPort;
     this.trace = new LinkedList<TraceItem>();
@@ -35,7 +35,7 @@ public class Packet {
     return frame.getEtherType();
   }
 
-  public final int ingressPort() {
+  public final SwitchPort ingressPort() {
     trace.add(TraceItemV.inPort(ingressPort));
     return ingressPort;
   }
@@ -57,9 +57,9 @@ public class Packet {
     return (frame.getEtherType() == exp);
   }
 
-  public final boolean ingressPortIs(int exp) {
+  public final boolean ingressPortIs(SwitchPort exp) {
     trace.add(TraceItemT.inPortIs(ingressPort, exp));
-    return (ingressPort==exp);
+    return (ingressPort.equals(exp));
   }
 
   @Override

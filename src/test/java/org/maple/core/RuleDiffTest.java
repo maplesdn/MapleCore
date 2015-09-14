@@ -21,7 +21,7 @@ public class RuleDiffTest {
         //assertTrue(!rule1.equals(rule3));
 
         HashSet<TraceItem> fieldValues = new HashSet<TraceItem>();
-        fieldValues.add(TraceItemV.inPort(10));
+        fieldValues.add(TraceItemV.inPort(new SwitchPort((long) 0, 10)));
         Match match1 = new Match(fieldValues);
 
         Rule rule4 = new Rule(1,match1,Action.Drop());
@@ -30,26 +30,26 @@ public class RuleDiffTest {
 
   @Test
   public void TestDiffEquals() {
-    Diff diff1 = new Diff(new LinkedList<Rule>(), new LinkedList<Rule>());
-    Diff diff2 = new Diff(new LinkedList<Rule>(), new LinkedList<Rule>());
+    Diff diff1 = new Diff(new HashSet<Rule>(), new HashSet<Rule>());
+    Diff diff2 = new Diff(new HashSet<Rule>(), new HashSet<Rule>());
     assertTrue(diff1 != null);
     assertTrue(diff2 != null);
     assertEquals(diff1, diff2);
   }
   
     public void TestDiff1() {
-        LinkedList<Rule> oldRules = new LinkedList<Rule>();
+        HashSet<Rule> oldRules = new HashSet<Rule>();
 
         Rule rule1 = new Rule(1,Match.matchAny(),Action.Drop());
         oldRules.add(rule1);
-        Rule rule2 = new Rule(1,Match.matchAny(),Action.ToPorts(1));
+        Rule rule2 = new Rule(1,Match.matchAny(),Action.ToPorts(new SwitchPort((long) 0, 1)));
         oldRules.add(rule2);
 
-        LinkedList<Rule> newRules = new LinkedList<Rule>();
+        HashSet<Rule> newRules = new HashSet<Rule>();
         Rule rule3 = new Rule(1,Match.matchAny(),Action.Punt());
         newRules.add(rule3);
         HashSet<TraceItem> fieldValues = new HashSet<TraceItem>();
-        fieldValues.add(TraceItemV.inPort(10));
+        fieldValues.add(TraceItemV.inPort(new SwitchPort((long) 0, 10)));
         Match match1 = new Match(fieldValues);
         Rule rule4 = new Rule(1,match1,Action.Drop());
         newRules.add(rule4);
@@ -57,13 +57,13 @@ public class RuleDiffTest {
         Diff expectedDiff = new Diff(oldRules,newRules);
 
         Controller c = new Controller() {
-            public void sendPacket(byte[] data, int inSwitch, int inPort, int... ports) {
+            public void sendPacket(byte[] data, Switch inSwitch, SwitchPort inPort, SwitchPort... ports) {
                 System.out.println("In sendPacket");
             }
-            public void installRules(LinkedList<Rule> rules, int... outSwitches) {
+            public void installRules(HashSet<Rule> rules, Switch... outSwitches) {
                 System.out.println("In installRules");
             }
-            public void deleteRules(LinkedList<Rule> rules, int... outSwitches) {
+            public void deleteRules(HashSet<Rule> rules, Switch... outSwitches) {
                 System.out.println("In deleteRules");
             }
         };

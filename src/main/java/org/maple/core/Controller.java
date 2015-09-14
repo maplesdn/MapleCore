@@ -1,6 +1,7 @@
 
 package org.maple.core;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 
 /**
@@ -16,19 +17,19 @@ public interface Controller {
    * @param inPort the port number on the ingress switch
    * @param ports a list of egress ports to send the packet to
    */
-  public void sendPacket(byte[] data, int inSwitch, int inPort, int... ports);
+  public void sendPacket(byte[] data, Switch inSwitch, SwitchPort inPort, SwitchPort... ports);
 
   /**
    * installRules will be called when the Maple system compiles/issues OpenFlow Rules
    * @param rules a list of rules to install
    * @param outSwitches a list of switches in which to install the rules
    */
-  public void installRules(LinkedList<Rule> rules, int... outSwitches);
+  public void installRules(HashSet<Rule> rules, Switch... outSwitches);
 
   /**
    * deleteRules will be called when the Maple system removes OpenFlow rules
    * @param rules a list of rules to delete
    * @param outSwitches a list of switches in which to delete the rules
    */
-  public void deleteRules(LinkedList<Rule> rules, int... outSwitches);
+  public void deleteRules(HashSet<Rule> rules, Switch... outSwitches);
 }

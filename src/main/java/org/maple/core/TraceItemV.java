@@ -46,10 +46,10 @@ public class TraceItemV extends TraceItem {
     return item;
   }
 
-  public static TraceItemV inPort(int port) {
+  public static TraceItemV inPort(SwitchPort port) {
     TraceItemV item = new TraceItemV();
     item.field = TraceItemV.Field.IN_PORT;
-    item.value = port;
+    item.value = (long) port.hashCode();
     return item;
   }
 

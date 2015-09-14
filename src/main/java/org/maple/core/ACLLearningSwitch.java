@@ -11,13 +11,13 @@ import java.util.Map;
  */
 public class ACLLearningSwitch extends MapleFunction {
   
-  Map<Long, Integer> macTable;
+  Map<Long, SwitchPort> macTable;
 
   // TODO: make blacklist editable via runtime administrative API.
   HashSet<Long> blacklist;
 
   public ACLLearningSwitch() {
-    macTable = new HashMap<Long, Integer>();
+    macTable = new HashMap<Long, SwitchPort>();
     blacklist = new HashSet<Long>();
     blacklist.add(2L);
   }
@@ -33,7 +33,7 @@ public class ACLLearningSwitch extends MapleFunction {
     if(macTable.containsKey(dst_mac)==false) {
       return Route.toPorts(ports());
     }else {
-      int dst_portID = macTable.get(dst_mac);
+      SwitchPort dst_portID = macTable.get(dst_mac);
       return Route.toPorts(dst_portID);
     }
   }
