@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.HashSet;
@@ -37,19 +38,19 @@ public class TraceTreeTest {
         SwitchPort sp2 = new SwitchPort(swID, 2);
         SwitchPort sp3 = new SwitchPort(swID, 3);
 
-        SwitchPort[] outcome = {sp3, sp2, sp1};   // user function return
+        SwitchPort[] outcome = {sp1, sp2, sp3};   // user function return
         tree.augment(emptyTrace, Route.toPorts(outcome));
 
         // UnitTest will stop if any assert.. statement fails
         assertNotNull(tree.root);
         assertTrue(tree.root instanceof L); // L is leaf
-        assertArrayEquals(outcome, ((L) tree.root).outcome);  // cast tree.root to L leaf
+        assertEquals(new HashSet<SwitchPort>(Arrays.asList(outcome)), new HashSet<SwitchPort>(Arrays.asList(((L) tree.root).outcome)));  // cast tree.root to L leaf
 
         byte[] frameBytes = makeFrameBytes(data);
         Ethernet frame = new Ethernet();  // create import
         frame.deserialize(frameBytes, 0, frameBytes.length);
         assertNotNull(tree.evaluate(PORT, frame));  // tree.evaluate: find all the L fulfill the requirements PORT and frame
-        assertArrayEquals(outcome, tree.evaluate(PORT, frame));
+        assertEquals(new HashSet<SwitchPort>(Arrays.asList(outcome)), new HashSet<SwitchPort>(Arrays.asList(tree.evaluate(PORT, frame))));
     }
 
 
@@ -81,14 +82,14 @@ public class TraceTreeTest {
         assertNotNull(node.getChild(PORT.hashCode()));
         assertTrue(node.getChild(PORT.hashCode()) instanceof L);
         L leaf = (L) node.getChild(PORT.hashCode());
-        assertArrayEquals(outcome, leaf.outcome);
+        assertEquals(new HashSet<SwitchPort>(Arrays.asList(outcome)), new HashSet<SwitchPort>(Arrays.asList(leaf.outcome)));
 
         byte[] frameBytes = makeFrameBytes(data);
         Ethernet frame = new Ethernet();
         frame.deserialize(frameBytes, 0, frameBytes.length);
         assertNull(tree.evaluate(port1, frame));
         assertNotNull(tree.evaluate(PORT, frame));
-        assertArrayEquals(outcome, tree.evaluate(PORT, frame));
+        assertEquals(new HashSet<SwitchPort>(Arrays.asList(outcome)), new HashSet<SwitchPort>(Arrays.asList(tree.evaluate(PORT, frame))));
 
     }
 
@@ -289,9 +290,9 @@ public class TraceTreeTest {
         Rule compiledRule = it.next();
         Iterator<Rule> it2 = rulesExpected.iterator();
         Rule expectedRule = it2.next();
-        assertEquals(compiledRule,expectedRule);
-        assertEquals(rulesExpected.size(),rulesCompiled.size());
-        assertEquals(rulesExpected, rulesCompiled);
+        assertEquals(compiledRule, expectedRule);
+        assertEquals(rulesExpected.size(), rulesCompiled.size());
+        assertArrayEquals(rulesExpected.toArray(new Rule[0]), rulesCompiled.toArray(new Rule[0]));
 
         rulesExpected = new HashSet<Rule>();
         SwitchPort sp1 = new SwitchPort((long) 0, 1);
@@ -304,7 +305,7 @@ public class TraceTreeTest {
         LinkedList<TraceItem> emptyTrace = new LinkedList<TraceItem>();
         SwitchPort[] outcome = {sp1,sp2,sp3};
         tree.augment(emptyTrace, Route.toPorts(outcome));
-        assertEquals(rulesExpected, tree.compile());
+        assertArrayEquals(rulesExpected.toArray(new Rule[0]), tree.compile().toArray(new Rule[0]));
 
         tree = new TraceTree();
         trace = new LinkedList<TraceItem>();
@@ -314,7 +315,7 @@ public class TraceTreeTest {
         rulesExpected.add(new Rule(0,
                 Match.matchAny().add(TraceItemV.inPort(PORT)),
                 action));
-        assertEquals(rulesExpected, tree.compile());
+        assertArrayEquals(rulesExpected.toArray(new Rule[0]), tree.compile().toArray(new Rule[0]));
     }
 
 
@@ -332,7 +333,7 @@ public class TraceTreeTest {
         rulesExpected = new HashSet<Rule>();
         rulesExpected.add(new Rule(0, Match.matchAny(), Action.Punt()));
         assertNotNull(tree.compile());
-        assertEquals(rulesExpected, tree.compile());
+        assertArrayEquals(rulesExpected.toArray(new Rule[0]), tree.compile().toArray(new Rule[0]));
 
         trace = new LinkedList<TraceItem>();
         trace.add(TraceItemV.inPort(PORT));
@@ -347,7 +348,7 @@ public class TraceTreeTest {
         action = Action.ToPorts(sp1,sp2,sp3);
         rulesExpected.add(new Rule(0, Match.matchAny().add(TraceItemV.inPort(PORT)), action));
 
-        assertEquals(rulesExpected, tree.compile());
+        assertArrayEquals(rulesExpected.toArray(new Rule[0]), tree.compile().toArray(new Rule[0]));
 
     }
 
