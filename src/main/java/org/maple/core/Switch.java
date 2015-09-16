@@ -8,7 +8,7 @@ public class Switch implements Comparable<Switch>{
 
 
     private long SwitchID;
-    private HashSet<SwitchPort> SwitchPorts;
+    private HashSet<SwitchPort> SwitchPorts = new HashSet<SwitchPort>();
 
 
 
@@ -36,6 +36,14 @@ public class Switch implements Comparable<Switch>{
 
     public long getSwitch() {
         return this.SwitchID;
+    }
+
+    public void addPorts(SwitchPort port) {
+        this.SwitchPorts.add(port);
+    }
+
+    public void addPorts(Collection<SwitchPort> ports) {
+        this.SwitchPorts.addAll(ports);
     }
 
     public Collection<SwitchPort> getPorts() {

@@ -1,5 +1,6 @@
 package org.maple.core;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 
@@ -9,10 +10,11 @@ import java.util.LinkedList;
 public abstract class MapleFunction {
 
   HashSet<SwitchPort> ports = new HashSet<SwitchPort>();
+  HashMap<Long, Switch> switches = new HashMap<Long, Switch>();
 
-  final public HashSet<SwitchPort> ports() {
+  final public HashSet<SwitchPort> ports(Long switchID) {
     // make a copy:
-    return new HashSet<SwitchPort>(ports);
+    return new HashSet<SwitchPort>(switches.get(switchID).getPorts());
   }
 
   

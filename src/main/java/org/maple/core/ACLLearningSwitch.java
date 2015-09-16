@@ -31,7 +31,7 @@ public class ACLLearningSwitch extends MapleFunction {
     macTable.put(src_mac,p.ingressPort());
     long dst_mac = p.ethDst();
     if(macTable.containsKey(dst_mac)==false) {
-      return Route.toPorts(ports());
+      return Route.toPorts(ports(p.ingressPort().getSwitch()));
     }else {
       SwitchPort dst_portID = macTable.get(dst_mac);
       return Route.toPorts(dst_portID);

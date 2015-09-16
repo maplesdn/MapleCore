@@ -4,10 +4,7 @@
 
 package org.maple.core;
 
-import java.util.Set;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.ListIterator;
+import java.util.*;
 
 /**
  * Maple System is the runtime system which should be initiated on the SDN controller side
@@ -19,6 +16,7 @@ public class MapleSystem {
   TraceTree traceTree;
   HashSet<Rule> currentRules;
   Set<SwitchPort> ports;
+  Map<Long, Switch> switches;
 
   /**
    * Constructor to initiated the Maple System
@@ -30,6 +28,7 @@ public class MapleSystem {
     traceTree = new TraceTree();
     currentRules = new HashSet<Rule>();
     ports = new HashSet<SwitchPort>();
+    switches = new HashMap<Long, Switch>();
     
     if (c == null)
       throw new IllegalArgumentException("controller passed to " +
@@ -49,8 +48,21 @@ public class MapleSystem {
    */
   public void portUp(SwitchPort port) {
     // System.out.println("MapleSystem.portUp(" + port +")");
-    ports.add(port);
-    // userFunction.ports.add(port);
+    Switch sw;
+    if (switches.containsKey(port.getSwitch())) {
+      switches.get(port.getSwitch()).addPorts(port);
+    } else {
+      sw = new Switch(port.getSwitch());
+      switches.put(port.getSwitch(),sw);
+    }
+    if (userFunction.switches.containsKey(port.getSwitch())) {
+      userFunction.switches.get(port.getSwitch()).addPorts(port);
+    } else {
+      sw = new Switch(port.getSwitch());
+      userFunction.switches.put(port.getSwitch(),sw);
+    }
+    //ports.add(port);
+    //userFunction.ports.add(port);
   };
 
   /**
@@ -59,8 +71,10 @@ public class MapleSystem {
    */
   public void portDown(SwitchPort port) {
     // System.out.println("MapleSystem.portDown(" + port +")");    
+    Switch sw = new Switch(port.getSwitch());
+
     ports.remove(port);
-    // userFunction.ports.remove(port);
+    userFunction.ports.remove(port);
   };
 
   /**
@@ -84,7 +98,6 @@ public class MapleSystem {
     //System.out.println("User's MapleFunction returned: "  + "Trace: " + traceString(p.trace) + out);
 
     traceTree.augment(p.trace, out);
-
     controller.sendPacket(data, inSwitch, inPort, out.getEndPoints().toArray(new SwitchPort[0]));
 
     // Inform controller of updated rule sets.
